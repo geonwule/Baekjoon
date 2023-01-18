@@ -26,15 +26,19 @@ char	*ft_strjoin(char *s1, char *s2)
 	int		s1_len;
 	int		s2_len;
 
-	s1_len = strlen(s1);
+	if (s1 == NULL)
+		s1_len = 0;
+	else
+		s1_len = strlen(s1);
 	s2_len = strlen(s2);
 	str = (char *)malloc(sizeof(char) * (s1_len + s2_len + 1));
 	if (str == NULL)
 		return (0);
-	ft_strlcpy(str, s1, s1_len + 1);
+	if (s1)
+		ft_strlcpy(str, s1, s1_len + 1);
 	ft_strlcpy(str + s1_len, s2, s2_len + 1);
 	str[s1_len + s2_len] = '\0';
-    if (s1 != NULL)
+    if (s1)
         free(s1);
 	return (str);
 }
@@ -50,7 +54,7 @@ int main(void)
 {
     int     a;
     int     b;
-    char    *ret = NULL;
+    static char    *ret;
 
     while (1)
     {
@@ -59,10 +63,12 @@ int main(void)
         if (a == 0 && b == 0)
             break ;
         if (compare_big(a, b))
-            ft_strjoin(ret, "Yes\n");
-        else
-            ft_strjoin(ret, "No\n");
+            ret = ft_strjoin(ret, "Yes\n");
+		else
+            ret = ft_strjoin(ret, "No\n");
     }
     printf("%s", ret);
+	if (ret)
+		free(ret);
     return (0);
 }
