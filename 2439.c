@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+/*
 int main()
 {
     int n, i, j;
@@ -23,8 +24,8 @@ int main()
         i++;
     }
 }
+*/
 
-/*
 char    *star_insert(int idx, int len)
 {
     char    *ret;
@@ -43,6 +44,7 @@ char    *star_insert(int idx, int len)
             ret[len] = ' ';
         len--;
     }
+	return (ret);
 }
 
 void    print_star(char **ret)
@@ -89,4 +91,3 @@ int main()
     system("leaks a.out");
     return (0);
 }
-*/
