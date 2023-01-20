@@ -10,6 +10,7 @@ typedef struct s_list
 	struct s_list *next;
 } t_list;
 
+//util_list
 t_list *ft_lstnew(int *content, int idx)
 {
 	t_list *new;
@@ -24,6 +25,7 @@ t_list *ft_lstnew(int *content, int idx)
 	return (new);
 }
 
+//util_list
 t_list *ft_lstlast(t_list *lst)
 {
 	t_list *last;
@@ -38,6 +40,7 @@ t_list *ft_lstlast(t_list *lst)
 	return (last);
 }
 
+//util_list
 void ft_lstadd_back(t_list **lst, t_list *new)
 {
 	t_list *temp;
@@ -53,6 +56,7 @@ void ft_lstadd_back(t_list **lst, t_list *new)
 	ft_lstlast(temp)->next = new;
 }
 
+//util_list
 int ft_lstsize(t_list *lst)
 {
 	int count;
@@ -66,21 +70,45 @@ int ft_lstsize(t_list *lst)
 	return (count);
 }
 
-int value_insert(t_list *point, t_list *ret, int idx)
+int	no_joongbok(int *joong, int max, int idx)
+{
+	for (int i = 0; i < max; i++)
+	{
+		if (idx == joong[i])
+			return (0);
+	}
+	return (1);
+}
+
+int value_insert(t_list *point, t_list *ret, int size)
 {
 	t_list *temp = ret;
 	t_list *prev = ret;
 	int value = 0;
 	int i = 0;
+	int	j = 0;
+	int		joong[size];
+
+	for (int i = 0; i < size; i++)
+	{
+		joong[i] = 0;
+	}
 
 	while (i < 5)
 	{
 		while (temp)
 		{
-			if (temp->index == idx)
+			if (temp->index == point->index)
+			{
+				temp = temp->next;
 				continue;
-			if (point->content[i] == temp->content[i])
+			}
+			if (no_joongbok(joong, size, temp->index) && point->content[i] == temp->content[i])
+			{
+				joong[j] = temp->index;
+				j++;
 				value++;
+			}
 			temp = temp->next;
 		}
 		temp = prev;
@@ -95,7 +123,7 @@ void set_value(t_list *ret, int size)
 
 	while (temp)
 	{
-		temp->value = value_insert(temp, ret, temp->index);
+		temp->value = value_insert(temp, ret, size);
 		temp = temp->next;
 	}
 }
@@ -103,14 +131,45 @@ void set_value(t_list *ret, int size)
 void	high_value(t_list *ret)
 {
 	int	who = 1;
+	int	who_value;
 
+	who_value = ret->value;
 	while (ret)
 	{
-		if (ret->next != NULL && (ret->value < ret->next->value))
+		if (ret->next != NULL && (who_value < ret->next->value))
+		{
 			who = ret->next->index;
+			who_value = ret->next->value;
+		}
 		ret = ret->next;
 	}
 	printf("%d\n", who);
+}
+
+void	ft_lstclear(t_list **lst)
+{
+	t_list	*temp;
+
+	while (*lst)
+	{
+		temp = (*lst)->next;
+		free((*lst)->content);
+		free(*lst);
+		*lst = temp;
+	}
+	*lst = NULL;
+}
+
+void	value_print(t_list *ret)
+{
+	int	i = 1;
+
+	while (ret)
+	{
+		printf("%dSTUDENT VALUE = %d\n", ret->index, ret->value);
+		ret = ret->next;
+		i++;
+	}
 }
 
 int main()
@@ -134,9 +193,18 @@ int main()
 		}
 		ft_lstadd_back(&ret, ft_lstnew(new, i));
 	}
+	t_list	*prev = ret;
 
-	printf("ret lstsize = %d\n", ft_lstsize(ret));
+	set_value(ret, n);
+	high_value(ret);
+	value_print(prev);
+	ft_lstclear(&prev);
+	system("leaks a.out");
+}
 
+	// printf("ret lstsize = %d\n", ft_lstsize(ret));
+
+	// t_list *prev = ret;
 	// while (ret)
 	// {
 	// 	int i = 0;
@@ -148,8 +216,3 @@ int main()
 	// 	printf("\n");
 	// 	ret = ret->next;
 	// }
-	printf("ok");
-	set_value(ret, n);
-	printf("no ok");
-	high_value(ret);	
-}
