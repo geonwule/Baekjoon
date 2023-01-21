@@ -3,22 +3,7 @@
 
 int 	main()
 {
-	int	i = 0;
-	int	n;
-	int	*ret;
-	int	a;
+	double	pi = 3.754;
 
-	scanf("%d", &n);
-	ret = (int *)malloc(sizeof(int) * n);
-	while (i < n)
-	{
-		scanf("%d", &a);
-		ret[i] = a;
-		i++;
-	}
-	for (int j = 0; j < n; j++)
-	{
-		printf("%d", ret[j]);
-	}
-	printf("\n");
+	printf("%.2f\n", (pi + 0.001));
 }
