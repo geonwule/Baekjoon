@@ -119,7 +119,7 @@ double  pyung_gyun(t_list *ret)
     while (ret)
     {
         hakjum += ret->hakjum;
-        value += ret->value;
+        value += ret->value * ret->hakjum;
         ret = ret->next;
     }
 
@@ -139,8 +139,10 @@ int main()
     for (int i = 0; i < n; i++)
     {
         value = (char *)malloc(sizeof(char) * 3);
-        scanf("%s, %d, %s", name, &hak, value);
+        scanf("%s", name);
+        scanf("%d", &hak);
+        scanf("%s", value);
         ft_lstadd_back(&ret, ft_lstnew(i+1, hak, value));
     }
-    printf("%f\n", pyung_gyun(ret));
+    printf("%.2f\n", pyung_gyun(ret) + 0.001);
 }
