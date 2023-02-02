@@ -65,13 +65,13 @@ void a_plus_b(int *a, int *b, int a_len, int b_len, int *temp)
     int i = 0;
     int j = 0;
     int big_len;
+    int flag = 1;
     if (a[0])
         if (a[0] < 0 && b[0] < 0) // both minus
         {
             a[0] *= -1;
             b[0] *= -1;
-            temp[i] = -1;
-            i++;
+            flag = -1;
         }
     int box;
     a_len--;
@@ -89,7 +89,7 @@ void a_plus_b(int *a, int *b, int a_len, int b_len, int *temp)
     int ret[2002] = {
         0,
     };
-    int k = big_len;
+    int k = big_len ;
     if (temp[k + 1])
         k++;
     int q = 0;
@@ -99,6 +99,8 @@ void a_plus_b(int *a, int *b, int a_len, int b_len, int *temp)
         k--;
         q++;
     }
+    if (flag == -1)
+        ret[0] *= -1;
     for (int i = 0; i < q; i++)
     {
         printf("%d", ret[i]);
@@ -130,6 +132,7 @@ int main()
         0,
     };
 
+    /// @ㅇㅖ오ㅣ처리 ///////////////// 
     if (a[0] == 0 && b[0] == 0)
     {
         for (int i = 0; i < 3; i++)
@@ -168,7 +171,11 @@ int main()
         printf("0\n"); // A * B
         return (0);
     }
-    a_plus_b(a, b, a_len, b_len, temp);
+    /// @ㅇㅖ오ㅣ처리 ////////////////
+
+    a_plus_b(a, b, a_len, b_len, temp); // A + B
+    b[0] *= -1;
+    a_plus_b(a, b, a_len, b_len, temp); // A - B
     // a_minus_b();
     // a_cob_b();
 
