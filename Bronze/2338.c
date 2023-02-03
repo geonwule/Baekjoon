@@ -344,7 +344,7 @@ void a_multip_b(int *a, int *b, int a_len, int b_len)
     int ret[2002] = {
         0,
     };
-    if (max > i)    ////////////////// 곱하기 최종 인덱스만 수수정정하하자자..
+    if (max > i)
         i = max;
     int r = 0;
     for (int k = i - 1; k >= 0; k--)
@@ -456,19 +456,4 @@ int main()
     free(a_temp);
     free(b_temp);
     ////////////////////////////////////////////////////
-    // a_minus_b();
-    // a_cob_b();
-
-    // printf("a_len = %d\n", a_len);
-    // for (int i = 0; i < a_len; i++)
-    // {
-    //     printf("%d", a[i]);
-    // }
-    // printf("\n");
-    // printf("b_len = %d\n", b_len);
-    // for (int i = 0; i < b_len; i++)
-    // {
-    //     printf("%d", b[i]);
-    // }
-    // printf("\n");
 }
