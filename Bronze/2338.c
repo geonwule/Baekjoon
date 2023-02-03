@@ -335,7 +335,7 @@ void a_multip_b(int *a, int *b, int a_len, int b_len)
                 }
                 temp[j] += 1;
                 if (max < j)
-                    max = j;
+                    max = j + 1;
              }
             a_l--;
             i++;
