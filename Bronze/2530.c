@@ -17,7 +17,7 @@ int main()
         m -= 60;
         h += 1;
     }
-    if (h >= 24)
+    while (h >= 24)
         h -= 24;
     printf("%d %d %d\n", h, m, s);
 }
