@@ -21,36 +21,33 @@
 
 void ret_set(char *ret, char *name, char j_or_s)
 {
-    char sen[7] = {'S', 'e', 'n', 'i', 'o', 'r', '\0'};
-    char jun[7] = {'J','u','n','i','o','r','\0'};
+    char sen[8] = {'S', 'e', 'n', 'i', 'o', 'r', '\n', '\0'};
+    char jun[8] = {'J','u','n','i','o','r','\n','\0'};
     int i = 0;
-    while (ret[i])
+    while (ret[i] != 0)
         i++;
-    printf("i = %d\n", i);
-    while (name[i])
+    int j = 0;
+    while (name[j] != 0)
     {
-        ret[i] = name[i];
-        i++;
+        ret[i + j] = name[j];
+        j++;
     }
-    ret[i] = ' ';
-    i++;
+    ret[i + j] = ' ';
+    int k = i + j + 1;
     if (j_or_s == 'j')
     {
-        for (int j = 0; j < 5; j++)
+        for (int j = 0; j < 7; j++)
         {
-            ret[i + j] = jun[j];
-            i++;
+            ret[k + j] = jun[j];
         }
     }
     if (j_or_s == 's')
     {
-        for (int j = 0; j < 5; j++)
+        for (int j = 0; j < 7; j++)
         {
-            ret[i + j] = sen[j];
-            i++;
+            ret[k + j] = sen[j];
         }
     }
-    ret[i] = '\n';
 }
 
 int main()
