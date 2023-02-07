@@ -3,6 +3,9 @@
     "files.associations": {
         "climits": "c",
         "cstring": "c",
-        "locale": "c"
+        "locale": "c",
+        "__string": "c",
+        "cstdio": "c",
+        "string.h": "c"
     }
 }
