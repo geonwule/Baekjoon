@@ -28,6 +28,60 @@ int scan_a_b(int *box)
     return (box_len);
 }
 
+int exept_process(int *a, int *b, int a_len, int b_len)
+{
+    if (a[0] == 0 && b[0] == 0)
+    {
+        for (int i = 0; i < 3; i++)
+            printf("0\n");
+        return (0);
+    }
+    if (a[0] == 0 || b[0] == 0)
+    {
+        if (a[0] == 0)
+        {
+            for (int i = 0; i < b_len; i++) // A + B
+            {
+                printf("%d", b[i]);
+            }
+            printf("\n");
+            b[0] *= -1; // A - B
+            for (int i = 0; i < b_len; i++)
+            {
+                printf("%d", b[i]);
+            }
+            printf("\n");
+        }
+        if (b[0] == 0)
+        {
+            for (int i = 0; i < a_len; i++) // A + B
+            {
+                printf("%d", a[i]);
+            }
+            printf("\n");
+            for (int i = 0; i < a_len; i++) // A - B
+            {
+                printf("%d", a[i]);
+            }
+            printf("\n");
+        }
+        printf("0\n"); // A * B
+        return (0);
+    }
+    return (1);
+}
+
+int *a_b_temp(int *a)
+{
+    int *ret;
+    ret = (int *)malloc(sizeof(int) * 2002);
+    for (int i = 0; i < 2002; i++)
+    {
+        ret[i] = a[i];
+    }
+    return (ret);
+}
+
 int *temp_set(void)
 {
     int *temp;
@@ -60,60 +114,39 @@ int abs_set(int *a, int *b, int a_len, int b_len)
     return (0);
 }
 
-void a_minus_b(int *a, int *b, int a_len, int b_len, int minus) // abs(a) > abs(b)
+void a_minus_b(int *a, int *b, int a_len, int b_len, int minus) // abs(a) >= abs(b)
 {
-    int a_l = a_len - 1;
-    int b_l = b_len - 1;
     int *temp = temp_set();
     int i = 0;
-    int j;
-    while (b_l >= 0)
+    while (i < a_len)
     {
-        temp[i] = a[a_l] - b[b_l];
-        if (temp[i] < 0)
+        if (i < b_len)
         {
-            temp[i] += 10;
-            j = a_l - 1;
-            while (a[j] - 1 < 0)
-            {
-                a[j] -= 1;
-                a[j] += 10;
-                j--;
-            }
-            a[j] -= 1;
+            temp[i] += a[a_len - i - 1] - b[b_len - i - 1];
+            i++;
         }
-        i++;
-        b_l--;
-        a_l--;
-    }
-    while (a_l >= 0)
-    {
-        temp[i] = a[a_l];
-        i++;
-        a_l--;
-    }
-    int ret[2002] = {
-        0,
-    };
-    for (int k = i - 1; k >= 0; k--)
-    {
-        if (temp[k] != 0)
+        else
         {
-            i = k;
-            break;
+            temp[i] += a[a_len -i - 1];
+            i++;
         }
     }
-    int r = 0;
+    for (int j = 0; j < 2001; j++)
+    {
+        while (temp[j] < 0)
+        {
+            temp[j] += 10;
+            temp[j + 1] -= 1;
+        }
+    }
+    i = 2001;
+    while (temp[i] == 0)
+        i--;
+    if (minus == -1)
+        temp[i] *= -1;
     for (int k = i; k >= 0; k--)
     {
-        ret[r] = temp[k];
-        r++;
-    }
-    if (minus == -1)
-        ret[0] *= -1;
-    for (int k = 0; k <= i; k++)
-    {
-        printf("%d", ret[k]);
+        printf("%d", temp[k]);
     }
     printf("\n");
     free(temp);
@@ -132,37 +165,31 @@ void a_abs_comp_b(int *a, int *b, int a_len, int b_len) // a > 0 , b < 0
         a_minus_b(a, b, a_len, b_len, 1);
 }
 
-void big_plus_small(int *a, int *b, int a_len, int b_len, int *temp)
+int big_plus_small(int *a, int *b, int a_len, int b_len, int *c)
 {
     int i = 0;
-    int box;
-    while (a_len >= 0)
+    while (i < a_len)
     {
-        while (b_len >= 0)
+        if (i < b_len)
         {
-            box = 0;
-            box += a[a_len] + b[b_len];
-            if (box / 10)
-            {
-                box = box % 10;
-                temp[i + 1] += 1; // 0 init
-            }
-            temp[i] += box;
-            a_len--;
-            b_len--;
+            c[i] += a[a_len -i -1] + b[b_len - i -1];
             i++;
         }
-        if (a_len < 0)
-            break;
-        temp[i] += a[a_len];
-        if (temp[i] / 10)
+        else
         {
-            temp[i + 1] += 1;
-            temp[i] = temp[i] % 10;
+            c[i] += a[a_len - i - 1];
+            i++;
         }
-        a_len--;
-        i++;
     }
+    for (int j = 0; j < 2002; j++)
+    {
+        c[j + 1] += c[j] / 10;
+        c[j] %= 10;
+    }
+    i = 2001;
+    while (c[i] == 0)
+        i--;
+    return (i);
 }
 
 void a_plus_b(int *a, int *b, int a_len, int b_len)
@@ -170,14 +197,13 @@ void a_plus_b(int *a, int *b, int a_len, int b_len)
     int *temp = temp_set();
     int i = 0;
     int j = 0;
-    int big_len;
-    int flag = 1;
+    int minus = 1;
     if (a[0])
         if (a[0] < 0 && b[0] < 0) // both minus
         {
             a[0] *= -1;
             b[0] *= -1;
-            flag = -1;
+            minus = -1;
         }
     if (a[0] < 0 || b[0] < 0) // one minus
     {
@@ -195,50 +221,19 @@ void a_plus_b(int *a, int *b, int a_len, int b_len)
         }
         return;
     }
-    int box;
-    a_len--;
-    b_len--;
+    int max;
     if (a_len >= b_len)
-    {
-        big_plus_small(a, b, a_len, b_len, temp);
-        big_len = a_len;
-    }
+        max = big_plus_small(a, b, a_len, b_len, temp);
     else if (a_len < b_len)
+        max = big_plus_small(b, a, b_len, a_len, temp);
+    if (minus == -1)
+        temp[max] *= -1;
+    for (int i = max; i >= 0; i--)
     {
-        big_plus_small(b, a, b_len, a_len, temp);
-        big_len = b_len;
-    }
-    int ret[2002] = {
-        0,
-    };
-    int k = big_len;
-    if (temp[k + 1])
-        k++;
-    int q = 0;
-    while (k >= 0)
-    {
-        ret[q] = temp[k];
-        k--;
-        q++;
-    }
-    if (flag == -1)
-        ret[0] *= -1;
-    for (int i = 0; i < q; i++)
-    {
-        printf("%d", ret[i]);
+        printf("%d", temp[i]);
     }
     free(temp);
     printf("\n");
-}
-
-int b_count(int *b, int b_len)
-{
-    for (int i = 0; i < b_len; i++)
-    {
-        if (b[i] != 0)
-            return (1);
-    }
-    return (0);
 }
 
 int minus_check(int *a, int *b)
@@ -287,90 +282,34 @@ void a_or_b_one(int *a, int *b, int a_len, int b_len, int minus)
 void a_multip_b(int *a, int *b, int a_len, int b_len)
 {
     int minus = minus_check(a, b);
+    int *c = temp_set();
+    int max;
 
-    if (a[0] == 1 && a[1] == -48 || b[0] == 1 && b[1] == -48) // a or b == 1
+    for (int i = 0; i < a_len; i++)
     {
-        a_or_b_one(a, b, a_len, b_len, minus);
-        return;
-    }
-    int *temp = temp_set();
-    int b_l = b_len - 1;
-    int j = 0;
-    int max = 0;
-    int i;
-    int a_l;
-    while (b_count(b, b_len))
-    {
-        //b_count
-        b[b_l] -= 1;
-        if (b[b_l] < 0)
+        for (int j = 0; j < b_len; j++)
         {
-            b[b_l] += 10;
-            j = b_l -1;
-            while (b[j] - 1 < 0)
-            {
-                b[j] -= 1;
-                b[j] += 10;
-                j--;
-            }
-            b[j] -= 1;
-        }
-        //b_count
-        //
-        // temp += a : while (b_count)
-        i = 0;
-        a_l = a_len - 1;
-        while (a_l >= 0)
-        {
-            temp[i] += a[a_l];
-            if (temp[i] > 9)
-            {
-                temp[i] -= 10;
-                j = i + 1;
-                while (temp[j] + 1 > 9)
-                {
-                    temp[j] += 1;
-                    temp[j] -= 10;
-                    j++;
-                }
-                temp[j] += 1;
-                if (max < j)
-                    max = j + 1;
-             }
-            a_l--;
-            i++;
+            c[i + j] += a[a_len - i - 1] * b[b_len - j - 1];
+            max = i + j;
         }
     }
-    int ret[2002] = {
-        0,
-    };
-    if (max > i)
-        i = max;
-    int r = 0;
-    for (int k = i - 1; k >= 0; k--)
-    {
-        ret[r] = temp[k];
-        r++;
-    }
-    if (minus == -1)
-        ret[0] *= -1;
-    for (int k = 0; k < i; k++)
-    {
-        printf("%d", ret[k]);
-    }
-    printf("\n");
-    free(temp);
-}
-
-int *a_b_temp(int *a)
-{
-    int *ret;
-    ret = (int *)malloc(sizeof(int) * 2002);
     for (int i = 0; i < 2002; i++)
     {
-        ret[i] = a[i];
+        c[i + 1] += c[i] / 10;
+        c[i] %= 10;
     }
-    return (ret);
+    int k = 2001;
+    while (c[k] == 0)
+        k--;
+    max = k;
+    if (minus == -1)
+        c[max] *= -1;
+    for (int i = max; i >= 0; i--)
+    {
+        printf("%d", c[i]);
+    }
+    printf("\n");
+    free(c);
 }
 
 int main()
@@ -384,59 +323,22 @@ int main()
     int a_len = scan_a_b(a);
     int b_len = scan_a_b(b);
 
-    /// @ㅇㅖ오ㅣ처리 /////////////////
-    if (a[0] == 0 && b[0] == 0)
-    {
-        for (int i = 0; i < 3; i++)
-            printf("0\n");
+    if (!exept_process(a, b, a_len, b_len))
         return (0);
-    }
-    if (a[0] == 0 || b[0] == 0)
-    {
-        if (a[0] == 0)
-        {
-            for (int i = 0; i < b_len; i++) // A + B
-            {
-                printf("%d", b[i]);
-            }
-            printf("\n");
-            b[0] *= -1; // A - B
-            for (int i = 0; i < b_len; i++)
-            {
-                printf("%d", b[i]);
-            }
-            printf("\n");
-        }
-        if (b[0] == 0)
-        {
-            for (int i = 0; i < a_len; i++) // A + B
-            {
-                printf("%d", a[i]);
-            }
-            printf("\n");
-            for (int i = 0; i < a_len; i++) // A - B
-            {
-                printf("%d", a[i]);
-            }
-            printf("\n");
-        }
-        printf("0\n"); // A * B
-        return (0);
-    }
-    /// @ㅇㅖ오ㅣ처리 //////////////////////////////
-    ////////////////////////////////////////////A + B
+    ///A + B
     int *a_temp = a_b_temp(a);
     int *b_temp = a_b_temp(b);
 
     a_plus_b(a_temp, b_temp, a_len, b_len);
     free(a_temp);
     free(b_temp);
-    ////////////////////////////////////////////////////   A - B
+
+    ///A - B
     a_temp = a_b_temp(a);
     b_temp = a_b_temp(b);
     b_temp[0] *= -1;
     if ((a_temp[0] < 0 && b_temp[0] < 0) || (a_temp[0] > 0 && b_temp[0] > 0))
-        a_plus_b(a_temp, b_temp, a_len, b_len); // A - B
+        a_plus_b(a_temp, b_temp, a_len, b_len); // - A - B or A - (-B)
     else if (b_temp[0] < 0)
     {
         b_temp[0] *= -1;
@@ -449,11 +351,11 @@ int main()
     }
     free(a_temp);
     free(b_temp);
-    ////////////////////////////////////////////////////// A x B
+
+    ///A x B
     a_temp = a_b_temp(a);
     b_temp = a_b_temp(b);
     a_multip_b(a_temp, b_temp, a_len, b_len);
     free(a_temp);
     free(b_temp);
-    ////////////////////////////////////////////////////
 }
