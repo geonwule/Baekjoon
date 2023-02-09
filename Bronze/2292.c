@@ -1,15 +1,24 @@
 #include <stdio.h>
+#include <limits.h>
 
 int main()
 {
-    int n, com, six = 0;
+    int n;
+    long long   k = 1, circle;
     scanf("%d", &n);
-    for (int i = 1; i <= n; i++)
+    if (n == 1)
     {
-        for (int j = i; j <= i * 6 + 1; j++)
+        printf("1\n");
+        return (0);
+    }
+    for (long long i = 1; i <= LLONG_MAX; i++)
+    {
+        k += i * 6;
+        if (n <= k)
         {
-            
+            circle = i;
+            break ;
         }
     }
-    printf("%d\n", six);
+    printf("%lld\n", circle + 1);
 }
