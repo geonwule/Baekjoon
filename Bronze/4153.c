@@ -1,12 +1,53 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+
 typedef struct s_list
 {
-    char *content;
-    struct s_list *next;
-    struct s_list *prev;
-} t_list;
+	void			*content;
+	struct s_list	*next;
+}	t_list;
+
+t_list	*ft_lstnew(void *content)
+{
+	t_list	*new;
+
+	new = (t_list *)malloc(sizeof(t_list));
+	if (new == NULL)
+		return (0);
+	new->content = content;
+	new->next = NULL;
+	return (new);
+}
+
+static t_list	*ft_lstlast(t_list *lst)
+{
+	t_list	*last;
+
+	if (lst == NULL)
+		return (0);
+	while (lst)
+	{
+		last = lst;
+		lst = lst->next;
+	}
+	return (last);
+}
+
+void	ft_lstadd_back(t_list **lst, t_list *new)
+{
+	t_list	*temp;
+
+	if (new == NULL)
+		return ;
+	if (*lst == NULL)
+	{
+		*lst = new;
+		return ;
+	}
+	temp = *lst;
+	ft_lstlast(temp)->next = new;
+}
 
 void max_set(int *max, int *n1, int *n2, int a, int b, int c)
 {
@@ -34,27 +75,6 @@ void max_set(int *max, int *n1, int *n2, int a, int b, int c)
     }
 }
 
-void    add_back(t_list *new, int w_r)
-{
-    char *txt;
-    t_list  *temp = new;
-
-    txt = malloc(6);
-    if (w_r == -1)
-        txt = "wrong";
-    else
-        txt = "right";
-    if (new == NULL)
-    {
-        new->content = txt;
-        new->next = NULL;
-        return ;
-    }
-    while (temp)
-        temp = temp->next;
-    temp->content = txt;
-    temp->next = NULL;
-}
 void    print_list(t_list *new)
 {
     while (new)
@@ -74,17 +94,9 @@ void    mal_free(t_list *new)
     free(new);
 }
 
-t_list  *list_new(char *content)
-{
-    t_list  *new;
-
-    new = (t_list *)malloc(sizeof(t_list));
-    new->content = content;
-}
-
 int main()
 {
-    t_list *new = list_new(NULL);
+    t_list *new = NULL;
     int a, b, c, max, n1, n2;
     while (1)
     {
@@ -93,15 +105,15 @@ int main()
             break;
         if (a == b || a == c || b == c)
         {
-            add_back(new, -1);  // wrong
+            ft_lstadd_back(&new, ft_lstnew("wrong"));  // wrong
             continue;
         }
         max_set(&max, &n1, &n2, a, b, c);
         if (max * max == n1 * n1 + n2 * n2)
-            add_back(new, 1);   // right
+            ft_lstadd_back(&new, ft_lstnew("right"));   // right
         else
-            add_back(new, -1);    // wrong
+            ft_lstadd_back(&new, ft_lstnew("wrong"));    // wrong
     }
     print_list(new);
-    mal_free(new);
+    //mal_free(new);
 }
