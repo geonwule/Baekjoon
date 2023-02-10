@@ -1,76 +1,48 @@
 #include <stdio.h>
-#include <limits.h>
 #include <stdlib.h>
-static int	digit_check(unsigned long long n)
-{
-	int	cnt;
 
-	cnt = 0;
-	if (n == 0)
-		return (1);
-	while (n)
+int *temp_set(int *a, int a_len)
+{
+	int *temp;
+
+	temp = (int *)malloc(sizeof(int) * 2002);
+	for (int i = 0; i < 2002; i++)
 	{
-		cnt++;
-		n /= 10;
+		if (i < a_len)
+			temp[i] = a[i];
+		else
+			temp[i] = 0;
 	}
-	return (cnt);
+	return (temp);
 }
 
-static void	insert_int(char *ret, unsigned long long n, int len)
+int a_mod_b(int *a, int *b, int a_len, int b_len, int *c_len)
 {
-	len--;
-	while (len >= 0)
+	int *c = temp_set(a, a_len);
+	int a_s = 0, b_s = 0, i, j;
+
+	for (j = 0; j < b_len; j++)
 	{
-		ret[len] = n % 10 + '0';
-		n /= 10;
-		len--;
+		b_s = b_s * 10 + b[j];
+		a_s = a_s * 10 + a[j];
 	}
-}
-
-char	*ft_itoa(unsigned long long n)
-{
-	char	*ret;
-	int		ret_len;
-	
-	if (n < 0)
-		ret_len = digit_check(-n) + 1;
-	else
-		ret_len = digit_check(n);
-	ret = (char *)malloc(sizeof(char) * ret_len + 1);
-	if (ret == NULL)
-		return (0);
-	ret[ret_len] = '\0';
-	if (n < 0)
+	if (b_s > a_s)
 	{
-		ret[0] = '-';
-		insert_int(ret + 1, -n, ret_len - 1);
+		a_s = a_s * 10 + a[j + 1];
 	}
-	else
-		insert_int(ret, n, ret_len);
-	return (ret);
 }
 
-unsigned long long jegob_31(int a)
-{
-    unsigned long long ret = 1;
-    for (int i = 0; i < a; i ++)
-    {
-        ret *= 31;
-    }
-    return (ret);
-}
-
-int abcde_put(char c)
-{
-    int i = c - 96;
-    return (i);
-}
-#include <limits.h>
 int main()
 {
-    unsigned long long n = ULLONG_MAX+1;
-    int ret = 0;
+	int a_len = 6, b_len = 2, c_len;
+	int a[6], b[2], *c;
+	a = {3, 8, 2, 5, 1, 2};
+	b = {3, 9};
 
-    printf("%llu\n%s\n", ULLONG_MAX+1, ft_itoa(n));
-    // printf("%llu\n%llu\n%llu\n", jegob_31(50), jegob_31(50)*2, ULLONG_MAX);
+	c = a_mod_b(a, b, a_len, b_len, &c_len);
+	for (int i = 0; i < c_len; i++)
+	{
+		printf("%d", c[i]);
+	}
+	printf("\n");
 }
