@@ -222,7 +222,7 @@ void m_set(int *m)
     }
 }
 
-int abs_set(int *a, int *b, int a_len, int b_len)
+int abs_m_set(int *a, int *b, int a_len, int b_len)
 {
     for (int i = 0; i < a_len; i++)
     {
@@ -234,21 +234,93 @@ int abs_set(int *a, int *b, int a_len, int b_len)
     return (2); // abs (a == b)
 }
 
-int ret_m_comp(int *ret, int ret_len, int *m, int m_len, int *flag)
+int ret_m_comp(int *a, int a_len, int *b, int b_len, int *flag)
 {
     int ret;
 
-    if (m_len > ret_len)
+    if (b_len > a_len)
         return (0);
-    else if (m_len < ret_len)
+    else if (b_len < a_len)
         return (1);
-    ret = abs_set(ret, m, ret_len, m_len);
+    ret = abs_m_set(a, b, a_len, b_len);
     if (ret == 2)
     {
         *flag = -1;
         return (0);
     }
     return (ret);
+}
+
+int abs_set(int *a, int *b, int a_len, int b_len)
+{
+    if (a_len > b_len)
+        return (3);
+    else if (a_len < b_len)
+        return (2);
+    if (a_len == b_len)
+    {
+        for (int i = 0; i < a_len; i++)
+        {
+            if (a[i] > b[i])
+                return (3);
+            else if (a[i] < b[i])
+                return (2);
+        }
+        return (1); // abs (a == b)
+    }
+    return (0);
+}
+
+int a_abs_comp_b(int *a, int *b, int a_len, int b_len) // a > 0 , b < 0
+{
+    if (abs_set(a, b, a_len, b_len) == 1) // abs(a) == abs(b)
+    {
+        printf("0\n");
+        free(a);
+        return(0);
+    }
+    if (abs_set(a, b, a_len, b_len) == 2) // abs(a) < abs(b)
+        return (-1);
+    return (1);  // abs(a) >= abs(b)
+}
+
+int a_minus_b(int *a, int *b, int a_len, int b_len, int *new_a) // abs(a) >= abs(b)
+{
+    int *temp = temp_set();
+    int i = 0, j;
+    while (i < a_len)
+    {
+        if (i < b_len)
+        {
+            temp[i] += a[a_len - i - 1] - b[b_len - i - 1];
+            i++;
+        }
+        else
+        {
+            temp[i] += a[a_len -i - 1];
+            i++;
+        }
+    }
+    for (int j = 0; j < 2001; j++)
+    {
+        while (temp[j] < 0)
+        {
+            temp[j] += 10;
+            temp[j + 1] -= 1;
+        }
+    }
+    i = 2001;
+    while (temp[i] == 0)
+        i--;
+    j = 0;
+    for (int k = i; k >= 0; k--)
+    {
+        new_a[j] = temp[k];
+        j++;
+    }
+    free(a);
+    free(temp);
+    return (j);
 }
 
 // while ( 1 )
@@ -262,43 +334,43 @@ int ret_m_comp(int *ret, int ret_len, int *m, int m_len, int *flag)
 // else
 //  printf("a");
 
-int a_abs_comp_b(int *a, int *b, int a_len, int b_len) // a > 0 , b < 0
+//return new_a_len;
+int *ret_mod_comp(int *a, int a_len, int *b, int b_len, int *new_a_len)
 {
-    if (abs_set(a, b, a_len, b_len) == 1) // abs(a) == abs(b)
-    {
-        printf("0\n");
-        return(0);
-    }
-    if (abs_set(a, b, a_len, b_len) == 2) // abs(a) < abs(b)
-        return (-1);
-    else if (abs_set(a, b, a_len, b_len) == 3) // abs(a) >= abs(b)
-        a_minus_b(a, b, a_len, b_len, 1);
-    return (1)
-}
-
-int *ret_mod_comp(int *a, int a_len, int *b, int b_len)
-{
-    int keep;
-    int *a_temp = a, *new = temp_set();
+    int comp, new_b_len, old_b_len, i = 2;
+    int *temp_a, *new_a = a, *new_b, *old_b;
+    
+    *new_a_len = a_len;
 
     while (1)
     {
-        a = a_abs_comp_b(a_temp, b, a_len, b_len);
-        if ( == 1)
-        else (keep = 0 || keep = -1)
+        comp = a_abs_comp_b(new_a, b, *new_a_len, b_len);
+        while (comp != 0 || comp != -1)
+        {
+            new_b = a_multip_i(b, b_len, i, &new_b_len);
+            comp = a_abs_comp_b(new_a, new_b, *new_a_len, new_b_len);
+            i++;
+        }
+        if (i != 0)
+        {
+            free(new_b);
+            old_b = a_multiple_i(b, b_len, i-2, &old_b_len);
+            comp = 
+        }
+        if (comp == 0)
+            return (0);
+        if (comp == -1)
             break ;
+        temp_a = temp_set();
+        *new_a_len = a_minus_b(new_a, b, *new_a_len, b_len, temp_a);
+        new_a = ret_set(temp_a, *new_a_len);
     }
+    return (new_a);
 }
-
-int main()
+int    *main2(int n, char *str, int *ret_len)
 {
-    int n, a_len, b_len, c_len, ret_len, m_len = 10, flag = 0;
-    int *a, *b, *c, *ret = NULL, *new_ret;
-    int m[10];
-    m_set(m);
-    scanf("%d", &n);
-    char str[n + 1];
-    scanf("%s", str);
+    int *a, *b, *c, *new_ret, *ret = NULL;
+    int a_len, b_len, c_len;
     for (int i = 0; i < n; i++)
     {
         a = temp_set();
@@ -307,17 +379,33 @@ int main()
         a_len = string_to_int(abcde_put(str[i]), a);
         b_len = string_to_int(jegob_31(i), b);
         c = a_multip_b(a, b, a_len, b_len, &c_len);
-        ret_len = a_plus_b(new_ret, ret, c, ret_len, c_len);
-        ret = ret_set(new_ret, ret_len);
+        *ret_len = a_plus_b(new_ret, ret, c, *ret_len, c_len);
+        ret = ret_set(new_ret, *ret_len);
     }
+    return (ret);
+}
+int main()
+{
+    int n, ret_len = 0, m_len = 10, flag = 0, n_ret_len;
+    int *ret, *new_ret;
+    int m[10];
+    m_set(m);
+    scanf("%d", &n);
+    char str[n + 1];
+    scanf("%s", str);
+    ret = main2(n, str, &ret_len);
     if (ret_m_comp(ret, ret_len, m, m_len, &flag))
     {
-        ret_mod_comp(ret, ret_len, m, m_len);
+        ret = ret_mod_comp(ret, ret_len, m, m_len, &n_ret_len);
+        ret_len = n_ret_len;
+        if (ret == NULL)
+            return (0);
     }
     if (flag == -1)
     {
         printf("0\n");
-        free(ret);       
+        free(ret);
+        return (0);
     }
     for (int i = 0; i < ret_len; i++)
     {
