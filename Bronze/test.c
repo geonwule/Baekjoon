@@ -1,48 +1,77 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int *temp_set(int *a, int a_len)
+typedef struct s_list
 {
-	int *temp;
+	void *content;
+	struct s_list *next;
+	struct s_list *prev;
+} t_list;
 
-	temp = (int *)malloc(sizeof(int) * 2002);
-	for (int i = 0; i < 2002; i++)
-	{
-		if (i < a_len)
-			temp[i] = a[i];
-		else
-			temp[i] = 0;
-	}
-	return (temp);
+t_list *ft_lstnew(void *content)
+{
+	t_list *new;
+
+	new = (t_list *)malloc(sizeof(t_list));
+	if (new == NULL)
+		return (0);
+	new->content = content;
+	new->next = NULL;
+	return (new);
 }
 
-int a_mod_b(int *a, int *b, int a_len, int b_len, int *c_len)
+static t_list *ft_lstlast(t_list *lst)
 {
-	int *c = temp_set(a, a_len);
-	int a_s = 0, b_s = 0, i, j;
+	t_list *last;
 
-	for (j = 0; j < b_len; j++)
+	if (lst == NULL)
+		return (0);
+	while (lst)
 	{
-		b_s = b_s * 10 + b[j];
-		a_s = a_s * 10 + a[j];
+		last = lst;
+		lst = lst->next;
 	}
-	if (b_s > a_s)
+	return (last);
+}
+
+void ft_lstadd_back(t_list **lst, t_list *new)
+{
+	t_list *temp;
+
+	if (new == NULL)
+		return;
+	if (*lst == NULL)
 	{
-		a_s = a_s * 10 + a[j + 1];
+		*lst = new;
+		return;
 	}
+	temp = *lst;
+	new->prev = ft_lstlast(temp);
+	ft_lstlast(temp)->next = new;
 }
 
 int main()
 {
-	int a_len = 6, b_len = 2, c_len;
-	int a[6], b[2], *c;
-	a = {3, 8, 2, 5, 1, 2};
-	b = {3, 9};
+	t_list *head;
+	t_list *temp;
 
-	c = a_mod_b(a, b, a_len, b_len, &c_len);
-	for (int i = 0; i < c_len; i++)
+	head->prev = NULL;
+	head = ft_lstnew("Hello");
+	ft_lstadd_back(&head, ft_lstnew("hi"));
+	ft_lstadd_back(&head, ft_lstnew("good"));
+	ft_lstadd_back(&head, ft_lstnew("last"));
+	temp = head;
+	while (temp)
 	{
-		printf("%d", c[i]);
+		printf("corrent = %s\n", temp->content);
+		if (temp->prev)
+			printf("prev = %s\n", temp->prev->content);
+		temp = temp->next;
 	}
-	printf("\n");
+	temp = ft_lstlast(head);
+	while (temp)
+	{
+		printf("%s\n", temp->content);
+		temp = temp->prev;
+	}
 }

@@ -1,24 +1,16 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   lst_standard.c                                     :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: geonwule <geonwule@student.42seoul.kr>     +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/11/18 18:25:52 by geonwule          #+#    #+#             */
-/*   Updated: 2023/02/09 13:08:48 by geonwule         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
+#include <stdio.h>
+#include <stdlib.h>
 
 typedef struct s_list
 {
-	void			*content;
-	struct s_list	*next;
-}	t_list;
+	void *content;
+	struct s_list *next;
+	struct s_list *prev;
+} t_list;
 
-t_list	*ft_lstnew(void *content)
+t_list *ft_lstnew(void *content)
 {
-	t_list	*new;
+	t_list *new;
 
 	new = (t_list *)malloc(sizeof(t_list));
 	if (new == NULL)
@@ -28,9 +20,9 @@ t_list	*ft_lstnew(void *content)
 	return (new);
 }
 
-static t_list	*ft_lstlast(t_list *lst)
+static t_list *ft_lstlast(t_list *lst)
 {
-	t_list	*last;
+	t_list *last;
 
 	if (lst == NULL)
 		return (0);
@@ -42,17 +34,18 @@ static t_list	*ft_lstlast(t_list *lst)
 	return (last);
 }
 
-void	ft_lstadd_back(t_list **lst, t_list *new)
+void ft_lstadd_back(t_list **lst, t_list *new)
 {
-	t_list	*temp;
+	t_list *temp;
 
 	if (new == NULL)
-		return ;
+		return;
 	if (*lst == NULL)
 	{
 		*lst = new;
-		return ;
+		return;
 	}
 	temp = *lst;
+	new->prev = ft_lstlast(temp);
 	ft_lstlast(temp)->next = new;
 }
