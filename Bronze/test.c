@@ -1,4 +1,5 @@
 #include <stdio.h>
+<<<<<<< HEAD
 #include <stdlib.h>
 
 typedef struct s_list
@@ -74,4 +75,13 @@ int main()
 		printf("%s\n", temp->content);
 		temp = temp->prev;
 	}
+=======
+#include <limits.h>
+
+int main()
+{
+	int box[1000000];
+	printf("%d\n",INT_MAX / 10000);
+
+>>>>>>> 39f175a34f70686aa795a0798737f36a166df1ed
 }
