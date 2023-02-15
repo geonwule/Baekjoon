@@ -6,6 +6,7 @@
         "locale": "c",
         "__string": "c",
         "cstdio": "c",
-        "string.h": "c"
+        "string.h": "c",
+        "cstdlib": "c"
     }
 }
