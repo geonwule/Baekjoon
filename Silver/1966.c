@@ -105,5 +105,4 @@ int main()
 		}
 		ret_print(node, idx);
 	}
-	system("leaks a.out");
 }
