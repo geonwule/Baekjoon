@@ -1,109 +1,77 @@
 #include <stdio.h>
+#include <stdlib.h>
 
-void k_equl_n(int k, int n)
+int compare(const void *x, const void *y)
 {
-    int ret = 1073741830, temp;
+    long long a = *(long long *)x;
+    long long b = *(long long *)y;
 
-    for (int i = 0; i < k; i++)
-    {
-        scanf("%d", &temp);
-        if (ret > temp)
-            ret = temp;
-    }
-    printf("%d\n", ret);
+    return (a - b);
 }
 
-void ft_swap(int *a, int *b)
+void input_box(long long *box, long long k)
 {
-    int temp;
-
-    temp = *a;
-    *a = *b;
-    *b = temp;
-}
-
-void input_box(int *box, int k)
-{
-    int temp;
-    for (int i = 0; i < k; i++)
+    for (long long i = 0; i < k; i++)
     {
-        scanf("%d", &box[i]);
+        scanf("%lld", &box[i]);
     }
-    for (int i = 0; i < k; i++)
-    {
-        temp = i;
-        for (int j = i; j < k; j++)
-        {
-            if (box[temp] > box[j])
-                temp = j;
-        }
-        ft_swap(&box[i], &box[temp]);
-    }
+    qsort(box, k, sizeof(long long), compare);
 }
 
 #define SUCCESS 0
 #define HIGH 1
 #define LOW -1
 
-int key_set(int *box, int mid, int *key, int k, int n)
+long long key_set(long long *box, long long mid, long long *key, long long k, long long n)
 {
-    int l;
+    long long l;
 
     l = 0;
-    for (int i = 0; i < k; i++)
+    for (long long i = 0; i < k; i++)
     {
         l += box[i] / mid;
     }
     if (l < n)
         return (HIGH);
+    // if (l == n)
+    // {
+    //     *key = mid;
+    //     return (SUCCESS);
+    // }
     if (l >= n)
     {
-        if (key_set(box, mid+1, key, k, n) == HIGH)
-        {
+        if (*key < mid)
             *key = mid;
-            return (SUCCESS);
-        }
-        else
-            return (LOW);   
+        return (LOW);
     }
     return (-2);
 }
 
-int bin_search(int *box, int k, int n)
+long long bin_search(long long *box, long long k, long long n)
 {
-    int key, ret, max = box[k - 1];
-    long long left = 0, mid, right = max;
-    while (left <= max)
+    long long key = 0, ret, max = box[k - 1];
+    long long left = 1, mid, right = max;
+    while (left <= right)
     {
         mid = (left + right) / 2;
         ret = key_set(box, mid, &key, k, n);
-        if (ret == SUCCESS)
-            return (key);
-        else if (ret == HIGH)
+        // if (ret == SUCCESS)
+        //     return (key);
+        if (ret == HIGH)
             right = mid - 1;
         else if (ret == LOW)
             left = mid + 1;
     }
-    return (-1); // error
+    return (key); // 최댓값
 }
 
 int main()
 {
-    int k, n, ret;
-    scanf("%d %d", &k, &n);
-    int box[k];
-
-    if (k == n)
-    {
-        k_equl_n(k, n);
-        return (0);
-    }
+    long long k, n;
+    long long ret;
+    scanf("%lld %lld", &k, &n);
+    long long box[k];
     input_box(box, k);
     ret = bin_search(box, k, n);
-    printf("%d\n", ret);
+    printf("%lld\n", ret);
 }
-
-// printf("min = %d\n", min);
-// for (int i = 0; i < k; i++)
-//     printf("%d\n", box[i]);
-// printf("\n");
