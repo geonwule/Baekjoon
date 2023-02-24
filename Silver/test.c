@@ -3,5 +3,5 @@
 
 int main()
 {
-	printf("intmax=%d, 2-31 = %lld\n", INT_MAX, (long long)(1073741824));
+	printf("%d\n", 2 % 2);
 }

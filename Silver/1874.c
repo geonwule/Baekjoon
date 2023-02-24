@@ -1,10 +1,16 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void    arr_init(int *arr, int n)
+// void    arr_init(int *stack, int n)
+// {
+//     for (int i = 0; i < n; i++)
+//         stack[i] = i + 1;
+// }
+
+void    arr_init(int *stack, int n)
 {
     for (int i = 0; i < n; i++)
-        arr[i] = i + 1;
+        stack[i] = 0;
 }
 
 int main()
@@ -12,8 +18,10 @@ int main()
     int n;
     scanf ("%d", &n);
     int box[n];
-    int arr[n];
-    arr_init(arr, n);
+    int stack[n]; // 0 init
+    char ret[(n * 2) + 1];
+    ret[n * 2] = '\0';
+    arr_init(stack, n);
     for (int i = 0; i < n; i++)
     {
         scanf("%d", &box[i]);
@@ -21,29 +29,38 @@ int main()
     int i = 0;
     int j = 1;
     int k = 0;
+    int q = 0;
     while (i < n)
     {
-        if (j < box[i])
+        if (j == box[i])
         {
-            printf("+\n");
-            j++;
-            arr[k] = j;
-            k++;
-        }
-        else if (j == box[i])
-        {
-            printf("+\n-\n");
+            ret[q] = '+';
+            ret[q+1] = '-';
+            q += 2;
             i++;
             j++;
-            k--;
+        }
+        else if (j < box[i])
+        {
+            ret[q] = '+';
+            q++;
+            stack[k] = j;
+            k++;
+            j++;
         }
         else if (j > box[i])
         {
-            while (arr[k] == box[i])
+            if (stack[k-1] != box[i])
             {
-                printf("-\n");
-                k--;
+                printf("NO\n");
+                return (0);
             }
+            ret[q] = '-';
+            i++;
+            k--;
+            q++;
         }
     }
+    for (int i = 0; ret[i] != '\0'; i++)
+        printf("%c\n", ret[i]);
 }

@@ -1,113 +1,117 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-char **board_set(int x, int y)
+char **board_init(int x, int y)
 {
-    char **board;
-    board = (char **)malloc(sizeof(char *) * (y + 1));
-    board[y] = NULL;
+    char **bod;
+    bod = (char **)malloc(sizeof(char *) * (y + 1));
+    bod[y] = NULL;
     for (int i = 0; i < y; i++)
-        board[i] = malloc(sizeof(char) * (x+1));
-    for (int i = 0; i < y; i++)
-        scanf("%s", board[i]);
-    return (board);
-}
-
-void change_color(char *c)
-{
-    if (*c == 'B')
-        *c = 'W';
-    else if (*c == 'W')
-        *c = 'B';
-}
-
-int ret_set(char **board, int x, int y)
-{
-    int ret = 0;
-    for (int i = y; i < y + 8; i++)
     {
-        for (int j = x; j < x + 8; j++)
+        bod[i] = (char *)malloc(sizeof(char) * (x + 1));
+        scanf("%s", bod[i]);
+    }
+    return (bod);
+}
+
+void mal_free(char **bod, int y)
+{
+    for (int i = 0; i < y; i++)
+        free(bod[i]);
+    free(bod);
+}
+
+void print_bod(char **bod, int y)
+{
+    for (int i = 0; i < y; i++)
+        printf("%s\n", bod[i]);
+}
+
+int cut_8x8(char **bod, int x, int x_m, int y, int y_m, int before)
+{
+    int min = 0, first_x = x % 2, first_y = y % 2;
+    char first = bod[y][x]; // 'B' or 'W'
+
+    for (int i = y; i < y_m; i++)
+    {
+        for (int j = x; j < x_m; j++)
         {
-            int k = j + 1;
-            if (k < x + 8 && (board[i][j] == board[i][k]))
+            if (i % 2 == first_y && j % 2 == first_x || i % 2 != first_y && j % 2 != first_x)
             {
-                change_color(&board[i][k]);
-                ret++;
+                if (bod[i][j] != first)
+                    min++;
             }
+            else if (i % 2 == first_y && j % 2 != first_x || i % 2 != first_y && j % 2 == first_x)
+            {
+                if (bod[i][j] == first)
+                    min++;
+            }
+            if (min >= before)
+            {
+                return (before);   
+            } // 최솟값 초과
         }
     }
-    return (ret);
+    return (min);
 }
 
-#include <limits.h>
-
-int black_white(char **board, int x, int y, int x_m, int y_m)
+int cut_8x8_2(char **bod, int x, int x_m, int y, int y_m, int before)
 {
-    int b = 0, w = 0, ret;
-    if (x + 7 >= x_m)
-        return (-1);
-    if (y + 7 >= y_m)
-        return (-2);
-    for (int i = y; i < y + 8; i++)
+    int min = 0, first_x = x % 2, first_y = y % 2;
+    char first = bod[y][x]; // 'B' or 'W'
+
+    for (int i = y; i < y_m; i++)
     {
-        for (int j = x; j < x + 8; j++)
+        for (int j = x; j < x_m; j++)
         {
-            if (board[y][x] == 'B')
-                b++;
-            else // 'W'
-                w++;
+            if (i % 2 == first_y && j % 2 == first_x || i % 2 != first_y && j % 2 != first_x)
+            {
+                if (bod[i][j] == first)
+                    min++;
+            }
+            else if (i % 2 == first_y && j % 2 != first_x || i % 2 != first_y && j % 2 == first_x)
+            {
+                if (bod[i][j] != first)
+                    min++;
+            }
+            if (min >= before)
+            {
+                return (before);   
+            } // 최솟값 초과
         }
     }
-    ret = b - w;
-    if (ret < 0)
-        ret *= -1;
-    return (ret);
+    return (min);
 }
 
-void x_y_start(char **board, int x, int y, int *x_ret, int *y_ret)
+int board_cut(char **bod, int x, int y)
 {
-    int temp, ret = INT_MAX, x_s, y_s, tf = 0;
+    int min = x * y; // min init (max)
+
     for (int i = 0; i < y; i++)
     {
+        if (y - i < 8)
+            break;
         for (int j = 0; j < x; j++)
         {
-            temp = black_white(board, j, i, x, y);
-            if (temp == -1)
+            if (x - j < 8)
                 break;
-            else if (temp == -2)
-            {
-                tf = -1;
-                break;
-            }
-            if (temp < ret)
-            {
-                x_s = j;
-                y_s = i;
-            }
+            min = cut_8x8(bod, j, j + 8, i, i + 8, min);
+            min = cut_8x8_2(bod, j, j + 8, i, i + 8, min);
         }
-        if (tf == -1)
-            break;
     }
-    *x_ret = x_s;
-    *y_ret = y_s;
-}
-
-#include <stdlib.h>
-
-void    mal_free(char **s, int n)
-{
-    for (int i = 0; i < n + 1; i++)
-        free(s[i]);
-    free (s);
+    return (min);
 }
 
 int main()
 {
-    int x, y, ret, x_start, y_start;
+    int y, x, min;
+    char **board;
     scanf("%d %d", &y, &x);
-    char **board = board_set(x, y);
-    x_y_start(board, x, y, &x_start, &y_start);
-    ret = ret_set(board, x_start, y_start);
-    printf("%d\n", ret);
+    board = board_init(x, y);
+    min = board_cut(board, x, y);
+    printf("%d\n", min);
     mal_free(board, y);
 }
+
+// printf("\n");
+// print_bod(board, y);
