@@ -6,5 +6,4 @@ int main()
 	char str[100];
 
 	read(1, str, 100);
-	printf("%s", str);
 }
