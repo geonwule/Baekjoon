@@ -1,111 +1,65 @@
 #include <stdio.h>
-#include <stdlib.h>
 
-typedef struct s_que
-{
-    long long hip;
-    struct s_que *next;
-} t_que;
+int min_heap[100001] = { 0, }; // index 1 ~ 100000
+int idx = 1; // index 1 init
 
-t_que *que_new(long long i)
+void    insert(int var)
 {
-    t_que *new = (t_que *)malloc(sizeof(t_que));
-    new->hip = i;
-    new->next = NULL;
-    return (new);
-}
-
-void ft_add_front(t_que **que, t_que *new)
-{
-    if (que == NULL)
+    int var_idx = idx, temp;
+    min_heap[idx++] = var;
+    while (var_idx > 1)
     {
-        *que = new;
-        return;
-    }
-    new->next = *que;
-    *que = new;
-}
-
-void ft_pop(t_que **que)
-{
-    t_que *temp = (*que);
-    // if ((*que)->next == NULL)
-    //     (*que) = NULL;
-    // else
-    (*que) = (*que)->next;
-    free(temp);
-}
-
-void push_in(t_que *que, t_que *new)
-{
-    t_que *temp = que;
-
-    if (que->next == NULL)
-    {
-        que->next = new;
-        return;
-    }
-    que = que->next;
-    while (que)
-    {
-        if (new->hip <= que->hip)
+        if (min_heap[var_idx] < min_heap[var_idx / 2])
         {
-            temp->next = new;
-            new->next = que;
-            return;
+            temp = min_heap[var_idx];
+            min_heap[var_idx] = min_heap[var_idx / 2];
+            min_heap[var_idx / 2] = temp;
+            var_idx /= 2;
         }
-        if (que->next == NULL)
-        {
-            que->next = new;
-            return;
-        }
-        temp = que;
-        que = que->next;
+        else
+            break ;
     }
 }
 
-void que_free(t_que *que)
+void    heap_react(int i)
 {
-    t_que *temp;
+    int left = i * 2;
+    int right = i * 2 + 1;
+    int small = i;
+    int temp;
 
-    while (que)
+    if (left < idx && min_heap[left] < min_heap[small])
+        small = left;
+    if (right < idx && min_heap[right] < min_heap[small])
+        small = right;
+    if (small != i)
     {
-        temp = que;
-        que = que->next;
-        free(temp);
+        temp = min_heap[small];
+        min_heap[small] = min_heap[i];
+        min_heap[i] = temp;
+        heap_react(small);
     }
 }
 
 int main()
 {
-    int n;
-    t_que *que = NULL;
-    long long temp;
+    int n, temp;
     scanf("%d", &n);
     for (int i = 0; i < n; i++)
     {
-        scanf("%lld", &temp);
+        scanf("%d", &temp);
         if (temp == 0)
         {
-            if (que == NULL)
+            if (idx == 1)
                 printf("0\n");
             else
             {
-                printf("%lld\n", que->hip);
-                ft_pop(&que);
+                printf("%d\n", min_heap[1]);
+                min_heap[1] = min_heap[--idx]; // replace root in last idx
+                heap_react(1);
             }
         }
         else
-        {
-            if (que == NULL || que->hip >= temp)
-            {
-                ft_add_front(&que, que_new(temp));
-            }
-            else
-            {
-                push_in(que, que_new(temp));
-            }
-        }
+            insert(temp);
     }
-    que_free(que);
 }

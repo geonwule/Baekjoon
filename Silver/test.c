@@ -1,10 +1,6 @@
 #include <stdio.h>
-#include <unistd.h>
-
+#include <limits.h>
 int main()
 {
-	char str[100];
-
-	read(1, str, 100);
-	printf("%s", str);
+    printf("%d, %lld\n", INT_MAX, (long long)1024*1024*1024*2);
 }
