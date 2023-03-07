@@ -1,17 +1,12 @@
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 
-int int_back(const void *x, const void *y)
+int main()//int ac, char **av)
 {
-    char *a = (char *)x;
-    char *b = (char *)y;
-    return (strlen(a));
-    //return (a[3] - b[5]);
-}
-
-int main()
-{
-    char *a = "123456";
-    char *b = "456789";
-    printf("%d\n", int_back(a, b));
+    long long test;
+    char    ch[1002];
+    scanf("%lld", &test);
+    sprintf(ch, "%lld", test);
+    printf("%s\n", ch);
 }

@@ -4,6 +4,28 @@
 
 int n;
 
+char **arr_init(void)
+{
+    scanf("%d", &n);
+    char **arr = (char **)malloc(sizeof(char *) * (n + 1));
+    arr[n] = NULL;
+    char *t;
+    for (int i = 0; i < n; i++)
+    {
+        t = (char *)malloc(sizeof(char) * 30);
+        scanf("%s", t);
+        arr[i] = t;
+    }
+    return (arr);
+}
+
+void mal_free(char **arr)
+{
+    for (int i = 0; i < n; i++)
+        free(arr[i]);
+    free(arr);
+}
+
 int compare(const void *x, const void *y)
 {
     char *a = (char *)x;
@@ -47,28 +69,6 @@ int compare(const void *x, const void *y)
     return (f_b - f_a);
 }
 
-char **arr_init(void)
-{
-    scanf("%d", &n);
-    char **arr = (char **)malloc(sizeof(char *) * (n + 1));
-    arr[n] = NULL;
-    char *t;
-    for (int i = 0; i < n; i++)
-    {
-        t = (char *)malloc(sizeof(char) * 30);
-        scanf("%s", t);
-        arr[i] = t;
-    }
-    return (arr);
-}
-
-void mal_free(char **arr)
-{
-    for (int i = 0; i < n; i++)
-        free(arr[i]);
-    free(arr);
-}
-
 void ft_qsort(char **arr, int L, int R) //, (int)(f)(const void *, const void *))
 {
     int left = L, right = R;
@@ -76,9 +76,9 @@ void ft_qsort(char **arr, int L, int R) //, (int)(f)(const void *, const void *)
     char *temp;
     while (left <= right)
     {
-        while (compare(arr[left], arr[pivot]) < 0)
+        while (compare(arr[left], arr[pivot]) < 0 && left < pivot)
             left++;
-        while (compare(arr[right], arr[pivot]) > 0)
+        while (compare(arr[right], arr[pivot]) > 0 && right > pivot)
             right--;
         if (left <= right)
         {
@@ -98,8 +98,8 @@ void ft_qsort(char **arr, int L, int R) //, (int)(f)(const void *, const void *)
 int main()
 {
     char **arr = arr_init();
-    ft_qsort(arr, 0, n - 1);
-    //qsort(arr, n, sizeof(arr[0]), compare);
+    //ft_qsort(arr, 0, n - 1);
+    qsort(arr, n, sizeof(arr[0]), compare);
     if (arr[0][0] == '0') // 최댓값이 0이면 0출력
     {
         printf("0\n");
