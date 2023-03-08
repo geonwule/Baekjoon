@@ -5,33 +5,27 @@ int main()
 {
     int n, k;
     char str[500001];
+    char stack[500001] = {
+        0,
+    };
+    int s_i = 0;
     scanf("%d %d", &n, &k);
     scanf("%s", str);
-    for (int i = 0; i + 1 < n; i++)
-    {
-        if (k == 0)
-            break;
-        // if (i == 0)
-        for (int j = i + 1; str[j] != '\0' && j < i + k; j++)
-        {
-            if (str[i] < str[j])
-            {
-                str[i] = '-';
-                k--;
-                break;
-            }
-        }
-        // else if (str[i] < str[i + 1])
-        // {
-        //     str[i] = '-';
-        //     k--;
-        // }
-    }
     for (int i = 0; i < n; i++)
     {
-        if (str[i] != '-')
-            printf("%c", str[i]);
+        while (k > 0 && stack[s_i - 1] && stack[s_i - 1] < str[i])
+        {
+            k--;
+            s_i--;
+        }
+        stack[s_i++] = str[i];
     }
+    while (k-- > 0)
+    {
+        s_i--;
+    }
+    stack[s_i] = '\0';
+    printf("%s\n", stack);
 }
 /* scanf n, k
 str[n] scanf(%s)

@@ -98,8 +98,8 @@ void ft_qsort(char **arr, int L, int R) //, (int)(f)(const void *, const void *)
 int main()
 {
     char **arr = arr_init();
-    //ft_qsort(arr, 0, n - 1);
-    qsort(arr, n, sizeof(arr[0]), compare);
+    ft_qsort(arr, 0, n - 1);
+    //qsort(arr, n, sizeof(arr[0]), compare);
     if (arr[0][0] == '0') // 최댓값이 0이면 0출력
     {
         printf("0\n");
