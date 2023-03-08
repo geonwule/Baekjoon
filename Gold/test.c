@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <limits.h>
+#include <stdlib.h>
 int main()
 {
-    printf("%d, %lld\n", INT_MAX, (long long)1024*1024*1024*2);
+    printf("%d\n", atoi("0045"));
 }
