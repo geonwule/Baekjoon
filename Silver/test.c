@@ -3,8 +3,9 @@
 
 int main()
 {
-	char *a = malloc(2);
-	char *b = malloc(2);
-	scanf("%s %s", a, b);
-	printf("%p\n%p\n", a, b);
+	//char temp[20], temp2[20]; not equl
+
+	char *temp = malloc(20), *temp2 = malloc(20);
+	scanf("%s %s", temp, temp2);
+	printf("%d\n%d\n", temp, temp2);
 }
