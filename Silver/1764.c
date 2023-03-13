@@ -1,74 +1,88 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 
-char str[500001][21];
-char un_seen[500001][21];
-int idx[500000];
-int idx_i = 0;
-
-/*
-void init_go(void)
+typedef struct s_name
 {
-    str=(char**)malloc(sizeof(char*)*500001);
-    for(int i=0;i<500000;i++)
+    char    name[21];
+}   t_name;
+
+long long	hash(char *s)
+{
+	long long	a = 0;
+	for (int i = 0; s[i] != '\0'; i++)
+		a += (i + 1) * (s[i]);
+	return (a);
+}
+
+int no_listen[100000] = {0, };
+
+void    no_listen_init(int n)
+{
+    char temp[21];
+    for (int i = 0; i < n; i++)
     {
-        str[i]=(char*)malloc(21);
+        scanf("%s", temp);
+        no_listen[hash(temp)] = 1;
     }
-    idx=(int*)calloc(500000, sizeof(int));
 }
-*/
 
-size_t hash[500000];
-
-size_t hash_5454(char *str)
-{
-    size_t hash = 5454;
-
-    for (int i = 0; str[i] != '\0'; i++)
-        hash = hash * str[i];
-    return (hash);
-}
+#include <string.h>
 
 int compare(const void *x, const void *y)
 {
     char *a = (char *)x;
     char *b = (char *)y;
-    return (strcmp(a, b));
+
+    return (strcmp(a, b));    
 }
 
 int main()
 {
-    // init_go();
+    int n, m;
+    scanf("%d %d", &n, &m);
+    t_name *str = (t_name *)malloc(sizeof(t_name) * (1000001));
+    t_name *ret = (t_name *)malloc(sizeof(t_name) * (500001));
+    int ret_i = 0;
+    for (int i = 0; i < n + m; i++)
+    {
+        scanf("%s", str[i].name);
+    }
+    qsort(str, n+m, sizeof(str[0]), compare);
+    for (int i = 0; i + 1 < n + m; i++)
+    {
+        if (strcmp(str[i].name, str[i+1].name) == 0)
+        {
+            strcpy(ret[ret_i++].name, str[i].name);
+            i++;
+        }
+    }
+    printf("%d\n", ret_i);
+    for (int i = 0; i < ret_i; i++)
+        printf("%s\n", ret[i].name);
+}
+
+/*
+int main()
+{
     int n, m;
     char temp[21];
-    scanf("%d %d", &n, &m);
-    for (int i = 0; i < n; i++)
-    {
-        scanf("%s", str[i]);
-        hash[i] = hash_5454(str[i]);
-    }
-    // qsort(str, n, sizeof(char*), compare);
-    size_t t_hash;
-    for (int i = 0; i < m; i++)
+    t_name *ret = (t_name *)malloc(sizeof(t_name) * (500001));
+    int ret_i = 0;
+    scanf ("%d %d", &n, &m);
+    no_listen_init(n);
+    for(int i = 0 ; i < m; i++)
     {
         scanf("%s", temp);
-        for (int j = 0; j < n; j++)
+        if (no_listen[hash(temp)])
         {
-            t_hash = hash_5454(temp);
-            if (hash[j] == t_hash)
-            {
-                idx[idx_i++] = j;
-                break;
-            }
+            strcpy(ret[ret_i++].name, temp);
         }
     }
-    printf("%d\n", idx_i);
-    if (idx_i > 0)
+    qsort(ret, ret_i, sizeof(ret[0]), compare);
+    printf("%d\n", ret_i);
+    for (int i = 0; i < ret_i; i++)
     {
-        for (int i = 0; i < idx_i; i++)
-        {
-            printf("%s\n", str[idx[i]]);
-        }
+        printf("%s\n", ret[i].name);
     }
-}
+    free(ret);
+}*/

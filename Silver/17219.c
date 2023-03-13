@@ -6,7 +6,7 @@ int	sum(char *s)
 {
 	int sum = 0;
 	for (int i = 0; s[i] != '\0'; i++)
-		sum += s[i];
+		sum += (s[i] * (i + 1));
 	return (sum);
 }
 
@@ -25,7 +25,7 @@ void site_psw_init(int n)
 	for (int i = 0; i < n; i++)
 	{
 		scanf("%s", juso);
-		idx = hashtable(juso);
+		idx = sum(juso);
 		scanf("%s", psw[idx]);
 	}
 }
@@ -34,28 +34,12 @@ int main()
 {
 	int n, m, idx;
 	char find[21];
-	int ret[100000];
-	int ret_i = 0;
 	scanf("%d %d", &n, &m);
 	site_psw_init(n);
 	for (int i = 0; i < m; i++)
 	{
 		scanf("%s", find);
-		idx = hashtable(find);
-		ret[i] = idx;
+		idx = sum(find);
+		printf("%s\n", psw[idx]);
 	}
-	for (int i = 0; i < m; i++)
-		printf("%s\n", psw[ret[i]]);
 }
-
-// int idx_find(char *f, int n)
-// {
-// 	int i;
-
-// 	for (i = 0; i < n; i++)
-// 	{
-// 		if (!strcmp(site[i], f))
-// 			return (i);
-// 	}
-// 	return (-1);
-// }
