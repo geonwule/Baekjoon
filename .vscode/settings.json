@@ -7,6 +7,7 @@
         "__string": "c",
         "cstdio": "c",
         "string.h": "c",
-        "cstdlib": "c"
+        "cstdlib": "c",
+        "typeinfo": "c"
     }
 }
