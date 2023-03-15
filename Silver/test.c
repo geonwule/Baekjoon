@@ -3,5 +3,9 @@
 
 int main()
 {
-    printf("%d\n", strcmp("aaa", "bbb"));
+    int i = 0;
+
+    for (int j = 0; j < 20; j++)
+        i += ('z') * (j + 1);
+    printf("%d\n", i);
 }
