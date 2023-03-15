@@ -40,16 +40,17 @@ int combination(void)
 				return (hashtable.arr[i]);
 		}
 	}
-	int sum = 0, gob = 1;
+	int sum, gob = 1;
 	for (int i = 0; i < 25621; i++)
 	{
+		sum = 0;
 		if (hashtable.arr[i])
 		{
-			sum += hashtable.arr[i];
-			gob *= hashtable.arr[i];
+			sum += hashtable.arr[i] + 1;
+			gob *= sum;
 		}
 	}
-	return (sum + gob);
+	return (gob - 1);
 }
 
 int main()
