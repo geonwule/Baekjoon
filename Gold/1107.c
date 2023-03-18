@@ -2,80 +2,92 @@
 #include <stdlib.h>
 #include <string.h>
 
-int abnormal(char a, char *ab, int num)
+typedef struct s_ch
 {
-    for (int i = 0; i < num; i++)
+    int num;    //5457
+    int len;    //4
+    char str[10];   //"5457"
+}   t_ch;
+typedef struct s_ab
+{
+    int n;  //3
+    char str[10];   // 6 7 8 = abnormal -> ab.str[6] = 0, ab.str[7] = 0, ab.str[8] = 0
+}   t_ab;
+
+t_ch    ch;
+t_ab    ab;
+
+void ab_init(void)
+{
+    for (int i = 0; i < 10; i++)
     {
-        if (ab[i] == a)
-            return (1);
+        ab.str[i] = '1';
     }
-    return (0);
-}
-
-char remote_push(char a, char *ab, int num)
-{
-    int i, j = 1;
-
-    i = a - '0';
-    if (!abnormal(a, ab, num))
-        return (a);
-    while (1)
-    {
-        if (i + j < 10)
-        {
-            if (!abnormal(i + j + '0', ab, num))
-                return (i + j + '0');
-        }
-        if (i - j >= 0)
-        {
-            if (!abnormal(i - j + '0', ab, num))
-                return (i - j + '0');
-        }
-        j++;
-    }
-}
-
-void ab_init(char *ab, int num)
-{
     int t;
-    for (int i = 0; i < num; i++)
+    for (int i = 0; i < ab.n; i++)
     {
         scanf("%d", &t);
-        ab[i] = t + '0';
+        ab.str[t] = '0';
     }
+}
+
+void    input(void)
+{
+    scanf("%s %d", ch.str, &ab.n);
+    ab_init();
+    ch.num = atoi(ch.str);
+    ch.len = (int)strlen(ch.str);
+}
+
+int compare(int a, int b)
+{
+    return (a < b ? a : b);
+}
+
+int abs_mi(int a, int b)
+{
+    return (a - b > 0 ? a-b : b-a);
+}
+
+int digit(int n)
+{
+    if (n == 0)
+        return (1);
+    int cnt = 0;
+    while (n)
+    {
+        cnt++;
+        n /= 10;
+    }
+    return (cnt);
+}
+
+#define false 1
+#define true 0
+
+int broken_button(int but)
+{
+   int but_digit = digit(but);
+   for (int i = 0; i < but_digit; i++)
+   {
+       if (ab.str[but % 10] == '0')
+            return (false);
+        but /= 10;
+   }
+   return (true);
 }
 
 int main()
 {
-    int num, ch_num, ch_len, cnt = 0;
-    char ch[10], ab[10], remote[10] = {
-                             0,
-                         };
-    scanf("%s %d", ch, &num);
-    ab_init(ab, num);
-    ch_num = atoi(ch);
-    ch_len = (int)strlen(ch);
-    char t;
-    for (int i = 0; i < ch_len; i++)
+    int now_num = 100;
+    input();
+    int ret = abs_mi(ch.num, now_num), temp;
+    for (int i = 0; i <= 1000001; i++)
     {
-        remote[i] = remote_push(ch[i], ab, num);
+        if (broken_button(i))
+            continue ;
+        temp = digit(i) + abs_mi(i, ch.num);
+        ret = compare(ret, temp);
     }
-    int remote_num = atoi(remote);
-    int j = 0;
-    while (remote[1] != '\0' && remote[j] == '0')
-        j++;
-    while (remote[j] != '\0')
-    {
-        cnt++;
-        j++;
-    }
-    while (remote_num != ch_num)
-    {
-        if (ch_num > remote_num) // +
-            remote_num++;
-        else // -
-            remote_num--;
-        cnt++;
-    }
-    printf("%d\n", cnt);
+    printf("%d\n", ret);
 }
