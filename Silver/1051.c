@@ -2,7 +2,7 @@
 
 char	rect[50][51];
 
-void	rect_init(int n, int m)
+void	rect_init(int n)
 {
 	for (int i = 0; i < n; i++)
 	{
@@ -19,8 +19,8 @@ int	main(void)
 {
 	int n, m, max;
 	scanf("%d %d", &n, &m);
-	rect_init(n, m);
-	max = compare(n, m);
+	rect_init(n);
+	max = compare(n, m) - 1;
 	for (int idx = max; idx >= 1; idx--)
 	{
 		for (int i = 0; i < n; i++)
@@ -33,7 +33,7 @@ int	main(void)
 					&& rect[i][j] == rect[i + idx][j + idx])
 				{
 					max = idx;
-					printf("%d\n", max * max);
+					printf("%d\n", (max + 1) * (max + 1));
 					return (0);
 				}
 			}
