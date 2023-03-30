@@ -42,7 +42,7 @@ void	recur(int *w, int *b, t_vars start, t_vars end)
 		e.y = end.y;
 		recur(w, b, s, e);
 		s.x = start.x;
-		e.x = (start.x + end.x) / 2;
+		e.x = (start.xend.x / 2;
 		recur(w, b, s, e);
 	}
 	else if (cut == 1)
