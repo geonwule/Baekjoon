@@ -8,6 +8,8 @@
         "cstdio": "c",
         "string.h": "c",
         "cstdlib": "c",
-        "typeinfo": "c"
+        "typeinfo": "c",
+        "cmath": "c",
+        "complex": "c"
     }
 }
