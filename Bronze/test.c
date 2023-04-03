@@ -1,6 +1,9 @@
 #include <stdio.h>
+#include <unistd.h>
+#include <stdlib.h>
+#include <limits.h>
 
 int main()
 {
-	printf("%ld\n", 1024*1024*1024*2);
+	printf("a > b = %lld\n", abs(INT_MIN));
 }
