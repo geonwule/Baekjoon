@@ -39,12 +39,11 @@ void	dfs(int idx)
 		print_ret();
 		return ;
 	}
-	for (int i = 1; i <= n; i++)//ret_i + 1; i <= n; i++)
+	for (int i = 1; i <= n; i++)
 	{
 		ret[idx] = n_box[i];
 		if (no_condition(idx))
 			continue ;
-		//ret_i = i;
 		dfs(idx + 1);
 	}
 }
@@ -60,8 +59,5 @@ int main()
 {
 	init();
 	qsort(n_box, n + 1, sizeof(int), compare);
-	// for (int i = 0; i <= n; i++)
-	// 	printf("%d", n_box[i]);
-	// return (0);
 	dfs(1);
 }
