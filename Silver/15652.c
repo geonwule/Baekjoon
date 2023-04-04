@@ -14,6 +14,16 @@ void print_ret(void)
 	}
 }
 
+int	no_condition(int idx)
+{
+	if (idx == 1)
+		return (0);
+	int now = idx--;
+	if (ret[now] < ret[idx])
+		return (1);
+	return (0);
+}
+
 void	dfs(int idx)
 {
 	if (idx == m + 1)
@@ -21,9 +31,11 @@ void	dfs(int idx)
 		print_ret();
 		return ;
 	}
-	for (int i = ret[idx - 1] + 1; i <= n; i++)
+	for (int i = 1; i <= n; i++)
 	{
 		ret[idx] = i;
+		if (no_condition(idx))
+			continue ;
 		dfs(idx + 1);
 	}
 }
