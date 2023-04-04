@@ -1,67 +1,49 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-typedef struct s_vars
+int	queen[15], ret_cnt = 0, n;
+
+int	no_queen_check(int idx)
 {
-	int x;
-	int y;
-}	t_vars;
-
-int n, ret[11], ret_cnt = 0;
-t_vars	queen[11];
-
-int	no_queen(int idx)
-{
-	int now = idx;
-
-	if (idx == 1)
+	if (idx == 0)
 		return (0);
-	while (--idx > 0)
+	int now_idx = idx;
+	while (--idx >= 0)
 	{
-		if (queen[now].x == queen[idx].x || queen[now].y == queen[idx].y // 상, 하, 좌, 우
-		|| abs(queen[now].x - queen[idx].x) == abs(queen[now].y - queen[idx].y)) // 대각선
+		if (queen[now_idx] == queen[idx] 
+		|| abs(now_idx - idx) == abs(queen[now_idx] - queen[idx]))
 			return (1);
 	}
 	return (0);
 }
 
-void	print_ret(void)
+void	print_queen(void)
 {
-	for (int i = 1; i <= 10; i++)
-	{
-		int j = 1;
-		while (queen[j].y != i)
-			j++;
-		printf("%d", queen[j].x);
-	}
+	for (int i = 0; i < n; i++)
+		printf("%d", queen[i]);
 	printf("\n");
 }
 
-int sec = 1;
-void	dfs(int level, int q_idx)
+void	dfs(int idx)
 {
-	if (level == 10)
+	if (idx == n)
 	{
-		ret_cnt += 1;
-		print_ret();
-		printf("-----%d----------\n", sec++);
+		//print_queen();
+		ret_cnt++;
 		return ;
 	}
-	for (int y = 1; y <= 10; y++)
+	for (int i = 0; i < n; i++)
 	{
-		for (int x = 1; x <= 10; x++)
-		{
-			queen[q_idx].x = x;
-			queen[q_idx].y = y;
-			if (no_queen(q_idx))
-				continue ;
-			dfs(level + 1, q_idx + 1);
-		}
+		queen[idx] = i;
+		if (no_queen_check(idx))
+			continue ;
+		dfs(idx + 1);
 	}
 }
 
 int main()
 {
-	dfs(0, 1);
-	printf("%d\n", ret_cnt);
+	scanf("%d", &n);
+	dfs(0);
+	printf("ret_cnt = %d\n", ret_cnt);
 }
