@@ -5,5 +5,14 @@
 
 int main()
 {
-	printf("a > b = %lld\n", abs(INT_MIN));
+	char arr[150];
+	scanf("%s", arr);
+	for (int i = 0; arr[i] != '\0'; i++)
+	{
+		if (arr[i] >= 'a' && arr[i] <= 'z')
+			arr[i] -= 32;
+		else
+			arr[i] += 32;
+	}
+	printf("%s", arr);
 }
