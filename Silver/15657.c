@@ -36,7 +36,7 @@ int	no_condition(int idx)
 	int now = idx;
 	while (--idx >= 0)
 	{
-		if (ret[now] == ret[idx])
+		if (ret[now] < ret[idx])
 			return (1);
 	}
 	return (0);
@@ -65,6 +65,3 @@ int main()
 	qsort(n_box, n, sizeof(int), compare);
 	dfs(0);
 }
-	// for (int i = 0; i < n; i++)
-	// 	printf("%d\n", n_box[i]);
-	// return (0);

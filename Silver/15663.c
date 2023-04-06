@@ -8,7 +8,7 @@ int	compare(const void *x, const void *y)
 	return (a - b);
 }
 
-int ret[9] = {0}, n, m, n_box[9], ret_i = 0;
+int ret[9] = {0}, n, m, n_box[9], ret_i = 0, double_box[10001] = {0, };
 
 void print_ret(void)
 {
@@ -26,7 +26,10 @@ void	init(void)
 {
 	scanf("%d %d", &n, &m);
 	for (int i = 0; i < n; i++)
+	{
 		scanf("%d", &n_box[i]);
+		double_box[n_box[i]] += 1;
+	}
 }
 
 int	no_condition(int idx)
@@ -34,9 +37,10 @@ int	no_condition(int idx)
 	if (idx == 0)
 		return (0);
 	int now = idx;
+	int double_cnt = double_box[n_box[now]];
 	while (--idx >= 0)
 	{
-		if (ret[now] == ret[idx])
+		if (ret[now] == ret[idx] && --double_cnt <= 0)
 			return (1);
 	}
 	return (0);
@@ -65,6 +69,3 @@ int main()
 	qsort(n_box, n, sizeof(int), compare);
 	dfs(0);
 }
-	// for (int i = 0; i < n; i++)
-	// 	printf("%d\n", n_box[i]);
-	// return (0);
