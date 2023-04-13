@@ -1,47 +1,51 @@
 #include <stdio.h>
 
-int dp[100001]; // k의 최댓값 = 100000 (배낭 최대무게)
-
-int dp_one(int n, int *w, int *v)
+typedef struct s_vars
 {
-    int v_max = 0;
+    int weight;
+    int value;
+}   t_vars;
 
-    for(int i = 0; i < n; i++)
-    {
-        if (w[i] == 1 && v[i] > v_max)
-            v_max = v[i];
-    }
-    return (v_max);
+t_vars stuff[100];
+int n, k;
+
+void    stuff_input(void)
+{
+    for (int i = 0; i < n; i++)
+        scanf("%d %d", &stuff[i].weight, &stuff[i].value);
 }
 
-int dp_two(int n, int *w, int *v)
+void    dfs(int *ret, int weight, int value, int idx)
 {
-    int v_max = dp[1];
-    for(int i = 0; i < n; i++)
+    if (weight > k)
+        return ;
+    if (weight <= k && *ret < value)
+        *ret = value;
+    for (int i = idx; i)
+    
+}
+
+{
+    for (int i = 0; i < n; i++)
     {
-        if(w[i] == 2 && v_max < v[i])
-            v_max = v[i];
+        dp[i] = stuff[i].weight;
+        dp2[i] = stuff[i].value;
+        if (dp[i] > k)
+            continue ;
+        if (*ret < dp[i])
+            *ret = dp2[i];
+        for (int j = i + 1; j < n; j++)
+        {
+            dp[i].
+        }
     }
-	return (v_max);
 }
 
 int main()
 {
-    int n, k, w[100], v[100];
-    scanf ("%d %d", &n, &k);
-    for (int i = 0; i < n; i++)
-    {
-        scanf("%d %d", &w[i], &v[i]);
-    }
-    dp[0] = 0;
-    dp[1] = dp_one(n, w, v);
-    dp[2] = 0;
-    dp[3] = 6;
-    dp[4] = 8;
-    dp[5] = 12;
-    for (int i = 2; i <= k; i++)
-    {
-        dp[i] = ?;
-    }
-    printf("%d\n", dp[k]);
+    scanf("%d %d", &n, &k);
+    stuff_input();
+    int ret = -1;
+    dfs(&ret, 0, 0, 0);
+    printf("%d\n", ret);
 }

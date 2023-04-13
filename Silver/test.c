@@ -1,36 +1,50 @@
 #include <stdio.h>
-#include <limits.h>
 
-double	power_recul(double x, int n)
-{
-	if (n == 0)
-		return (1.0);
-	double half = power_recul(x, n / 2);
-	if (n % 2 == 0)
-		return (half * half);
-	else if (n > 0)
-		return (half * half * x);
-	else
-		return (half * half / x);
+long long power(long long x, long long n, long long m);
+
+int main() {
+    long long A, B, C;
+    scanf("%lld %lld %lld", &A, &B, &C);
+    printf("%lld", power(A, B, C));
+    return 0;
 }
 
-double	power(double x, int n)
+long long power(long long x, long long n, long long m) {
+	if (m == 1)
+		return (0);
+    if (n == 0) {
+        return 1;
+    }
+    long long half = power(x, n / 2, m);
+    long long result = half * half % m;
+    if (n % 2 == 1) {
+        result = result * x % m;
+    }
+    return result;
+}
+
+int	power(int x, int n)
 {
-	double result = 1.0;
-	while (n)
+	if (n == 0)
+		return (1);
+	int half;
+	if (n % 2 == 0)
 	{
-		if (n % 2 == 1)
-			result *= x;
-		x *= x;
-		n /= 2;
+		half = power(x, n / 2);
+		return (half * half);
 	}
-	return (result);
+	else if (n % 2 == 1)
+	{
+		half = power(x, (n - 1) / 2);
+		return (half * half * x);
+	}
+	return (0);
 }
 
 int main()
 {
-	double	x =  2.0;
-	int n = 10;
-	double result = power(x, n);
-	printf("%f to the power of %d is %f\n", x, n, result);
+	int x, n;
+	printf("input x, n\n");
+	scanf("%d %d", &x, &n);
+	printf("x ^ n = %d\n", power(x, n));
 }

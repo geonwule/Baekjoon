@@ -12,6 +12,7 @@
         "cmath": "c",
         "complex": "c",
         "math.h": "c",
-        "chrono": "c"
+        "chrono": "c",
+        "_types.h": "c"
     }
 }
