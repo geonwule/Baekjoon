@@ -1,18 +1,13 @@
 #include <stdio.h>
-#include <unistd.h>
-#include <stdlib.h>
-#include <limits.h>
 
 int main()
 {
-	char arr[150];
-	scanf("%s", arr);
-	for (int i = 0; arr[i] != '\0'; i++)
+	int T;
+	scanf ("%d", &T);
+	for (int i = 0; i < T; i++)
 	{
-		if (arr[i] >= 'a' && arr[i] <= 'z')
-			arr[i] -= 32;
-		else
-			arr[i] += 32;
+		int a, b;
+		scanf("%d %d", &a, &b);
+		printf("%d\n", a + b);
 	}
-	printf("%s", arr);
 }
