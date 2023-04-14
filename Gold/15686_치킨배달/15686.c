@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include <stdlib.h>
+#include <limits.h>
 
 typedef struct s_vars
 {
@@ -35,7 +35,6 @@ void    input_init(void)
         }
     }
 }
-#include <limits.h>
 
 int dis_check(t_vars home, t_vars chicken)
 {
@@ -49,36 +48,7 @@ int dis_check(t_vars home, t_vars chicken)
     return (x + y);
 }
 
-// fail
 int    chicken_distance(t_vars *s_chicken, int s_ch_idx)
-{
-    int distance = 0;
-    for (int i = 0; i < home_idx; i++)
-    {
-        int home_dis = 1;
-        while (1)
-        {
-            if (home_location[i].y - home_dis >= 0 && map[home_location[i].y - home_dis][home_location[i].x] == 2
-            || home_location[i].x - home_dis >= 0 && map[home_location[i].y][home_location[i].x - home_dis] == 2
-            || map[home_location[i].y][home_location[i].x + home_dis] == 2
-            || map[home_location[i].y + home_dis][home_location[i].x] == 2)
-            {
-                break ;
-            }
-            else if (home_location[i].y - home_dis >= 0 && home_location[i].x - home_dis >= 0 && map[home_location[i].y - home_dis][home_location[i].x - home_dis] == 2
-            || map[home_location[i].y + home_dis][home_location[i].x + home_dis] == 2)
-            {
-                home_dis += 1;
-                break ;
-            }
-            home_dis++;
-        }
-        distance += home_dis;
-    }
-    return (distance);
-}
-
-/*int    chicken_distance(t_vars *s_chicken, int s_ch_idx)
 {
     int distance = 0;
     for (int i = 0; i < home_idx; i++)
@@ -87,13 +57,18 @@ int    chicken_distance(t_vars *s_chicken, int s_ch_idx)
         for (int j = 0; j < s_ch_idx; j++)
         {
             int dis = dis_check(home_location[i], s_chicken[j]);
+            if (dis == 1)
+            {
+                min = dis;
+                break ;
+            }
             if (min > dis)
                 min = dis;
-        }
+       }
         distance += min;
     }
     return (distance);
-}*/
+}
 
 int ret = INT_MAX;
 t_vars  s_chicken[13];
@@ -111,6 +86,7 @@ int duplicate(int level, t_vars ch_lo)
     return (0);
 }
 
+int check = 0;
 void back_tracking(int level, int idx)
 {
     if (level == m)
@@ -123,11 +99,9 @@ void back_tracking(int level, int idx)
     }
     for (int i = idx; i < ch_store; i++)
     {
-        // if (duplicate(level, ch_location[i]))
-        //     continue ;
         s_chicken[level].x = ch_location[i].x;
         s_chicken[level].y = ch_location[i].y;
-        back_tracking(level + 1, idx + 1);
+        back_tracking(level + 1, i + 1);
     }
 }
 
