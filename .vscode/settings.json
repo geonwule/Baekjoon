@@ -13,6 +13,7 @@
         "complex": "c",
         "math.h": "c",
         "chrono": "c",
-        "_types.h": "c"
+        "_types.h": "c",
+        "limits.h": "c"
     }
 }
