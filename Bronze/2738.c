@@ -14,15 +14,18 @@ int main()
                 int t;
                 scanf("%d", &t);
                 arr[i][j] += t;
-                if (k == 1)
-                {
-                    printf("%d", arr[i][j]);
-                    if (j + 1 == b)
-                        printf("\n");
-                    else
-                        printf(" ");
-                }
             }
+        }
+    }
+    for (int i = 0; i < a; i++)
+    {
+        for (int j = 0; j < b; j++)
+        {
+            printf("%d", arr[i][j]);
+            if (j + 1 == b)
+                printf("\n");
+            else
+                printf(" ");
         }
     }
 }
