@@ -1,4 +1,5 @@
 #include <stdio.h>
+<<<<<<< HEAD
 #include <stdlib.h>
 #include <string.h>
 
@@ -73,3 +74,27 @@ char *multiply(char *a, char *b)
 	}
 	return (result);
 }
+=======
+#include <string.h>
+int main() {
+	int ret=0;
+	for(int i=1;i<=5;i++)
+	{
+		char arr[11];
+		scanf("%s",arr);
+		for(int j=0;arr[j]!='\0';j++)
+		{
+			if(strncmp("FBI",&arr[j],3)==0)
+			{
+				if(ret>0)
+					printf(" ");
+				printf("%d",i);
+				ret++;
+				break ;
+			}
+		}
+	}
+	if(ret==0)
+		printf("HE GOT AWAY!");
+}
+>>>>>>> f4f335313d40b63972420c0cdfda8e6f4633d503
