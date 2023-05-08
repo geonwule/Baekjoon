@@ -3,23 +3,7 @@
 
 int main()
 {
-    int d, p, n;
-    scanf("%d", &n);
-    d = 0;
-	p = 0;
-    for (int i = 0; i < n; i++)
-    {
-        char temp;
-        read(0, &temp, 1);
-        if (temp == 'D')
-            d++;
-        else
-            p++;
-		if (d - p == 2 || d - p == -2)
-		{
-			printf("%d:%d\n", d, p);
-			return (0);
-		}
-    }
-    printf("%d:%d\n", d, p);
+    int z,x,c,v,b,n;
+	scanf("%d %d %d %d %d %d", &z, &x, &c, &v, &b, &n);
+	printf("%d %d %d %d %d %d\n", 1-z, 1-x, 2-c, 2-v, 2-b, 8-n);
 }
