@@ -1,0 +1,43 @@
+subject name = mini_paint
+expected = *.c *.h
+funct. = fopen, fread, fscanf, fclose, write, malloc, calloc, realloc, free\
+		memset, powf, sqrtf
+
+powf = 제곱을 해서 반환해준다. : float	powf(float x, float y); -> ret = x^y
+sqrtf = 제곱근을 구해서 반환해준다. : float sqrtf(float x); -> ret = root(x)
+
+execute example) ./mini_paint out_file
+
+int outfile{
+	width height background_char
+	c/C X Y RADIUS CHAR
+}
+width = 가로
+height = 높이
+background_char = 기본 배경
+
+c = empty_circle
+C = filled_circle
+X = 가로 기준 원의 중앙
+Y = 세로 기준 원의 중앙
+RADIUS = 원의 크기
+CHAR = 원을 이루는 문양
+
+ex) outfile_example{
+	10 10 .
+	C 4.5 4.5 3 @
+	c 4.5 4.5 3 #  
+}
+
+->
+. . . . . . . . . .
+. . . # # # . . . .
+. .  # @ @ # . . .
+. . # @ @ @ # . . .
+. . . # @ @ # . . .
+. . . . # # . . . .
+. . . . . . . . . .
+. . . . . . . . . .
+. . . . . . . . . .
+. . . . . . . . . .
+
