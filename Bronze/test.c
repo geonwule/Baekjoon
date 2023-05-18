@@ -2,10 +2,11 @@
 
 int main()
 {
-printf("	         ,r'"7\n");
-r`-_   ,'  ,/
- \. ". L_r'
-   `~\/
-      |
-      |
+	int a, b;
+	scanf("%d %d", &a, &b);
+	if ((a >= 12 && a <= 16) && b == 0)
+		printf("320");
+	else
+		printf("280");
+	return (0);
 }
