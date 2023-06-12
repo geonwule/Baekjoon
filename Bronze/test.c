@@ -1,12 +1,22 @@
 #include <stdio.h>
 
+void	h_print(void)
+{
+printf(" @@@   @@@ \n");
+printf("@   @ @   @\n");
+printf("@    @    @\n");
+printf("@         @\n");
+printf(" @       @ \n");
+printf("  @     @  \n");
+printf("   @   @   \n");
+printf("    @ @    \n");
+printf("     @     \n");
+}
+
 int main()
 {
-	int a, b;
-	scanf("%d %d", &a, &b);
-	if ((a >= 12 && a <= 16) && b == 0)
-		printf("320");
-	else
-		printf("280");
-	return (0);
+	int n;
+	scanf("%d", &n);
+	for (int i = 0; i < n; i++)
+		h_print();
 }
