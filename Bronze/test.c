@@ -1,22 +1,16 @@
 #include <stdio.h>
 
-void	h_print(void)
-{
-printf(" @@@   @@@ \n");
-printf("@   @ @   @\n");
-printf("@    @    @\n");
-printf("@         @\n");
-printf(" @       @ \n");
-printf("  @     @  \n");
-printf("   @   @   \n");
-printf("    @ @    \n");
-printf("     @     \n");
-}
-
 int main()
 {
-	int n;
-	scanf("%d", &n);
-	for (int i = 0; i < n; i++)
-		h_print();
+	int i = 0;
+	while (1)
+	{
+		char t;
+		int status = scanf("%c", &t);
+		if (status == EOF)
+			break ;
+		if (t == '\n' || t == '\0')
+			i++;
+	}
+	printf("%d", i);
 }
