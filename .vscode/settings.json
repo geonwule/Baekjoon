@@ -18,6 +18,7 @@
         "iostream": "cpp",
         "ostream": "cpp",
         "ios": "cpp",
-        "vector": "cpp"
+        "vector": "cpp",
+        "algorithm": "cpp"
     }
 }
