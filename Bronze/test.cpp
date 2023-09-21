@@ -1,41 +1,33 @@
 #include <iostream>
-#include <string>
+
+bool	check_arr(std::string tmp)
+{
+	std::string arr[] = {"Never gonna give you up", "Never gonna let you down", "Never gonna run around and desert you", \
+						"Never gonna make you cry", "Never gonna say goodbye",  "Never gonna tell a lie and hurt you", "Never gonna stop"};
+	for (int i = 0; i < 7; i++)
+	{
+		if (arr[i] == tmp)
+			return (true);
+	}
+	return (false);
+}
 
 int main()
 {
-	std::string a, b;
-	char c;
-	std::cin >> a >> c >> b;
-	if (b.size() > a.size())
+	int n;
+	std::cin >> n;
+	std::cin.ignore();
+	std::string ret = "No";
+	for (int i = 0; i < n; i++)
 	{
-		std::string temp = b;
-		b = a;
-		a = temp;
-	}
-	std::string ret = a + b;
-	if (c == '*')
-	{
-		for (int i = 1; i < ret.size(); i++)
+		std::string tmp;
+		std::getline(std::cin, tmp);
+		// std::cin >> tmp;
+		if (!check_arr(tmp))
 		{
-			if (ret[i] == '1')
-			{
-				ret.erase(i, 1);
-				std::cout << ret;
-				return (0);
-			}
+			ret = "Yes";
 		}
 	}
-	if (a.size() > b.size())
-	{
-		for (int i = 1; i <= b.size(); i++)
-		{
-			ret.erase(1, 1);
-		}
-	}
-	else
-	{
-		ret = a;
-		ret[0] = '2';
-	}
-	std::cout << ret;
+	std::cout << ret << std::endl;
+	return (0);
 }
