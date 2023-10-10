@@ -57,6 +57,7 @@
         "new": "cpp",
         "sstream": "cpp",
         "stdexcept": "cpp",
-        "streambuf": "cpp"
+        "streambuf": "cpp",
+        "__split_buffer": "cpp"
     }
 }
