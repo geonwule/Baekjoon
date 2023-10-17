@@ -23,50 +23,56 @@ struct zz
 
 int n,m,ret=0;
 
-void check(int i, string& s)
+vector<int>    setFailure(string   &pattern)
 {
-	int ci=n+1, co=n, cnt=0;
-    int cur = 'O';
-	while(i<s.size()&&cnt<2*n+1)
-	{
-        if (s[i] == cur)
-            return;
-        cur = s[i];
-		if(s[i]=='I')
-			ci--;
-		else
-			co--;
-		if(ci<0||co<0)
-			return ;
-		i++;
-		cnt++;
-	}
-	if(!ci&&!co)
-		ret++;
+    size_t  len = pattern.size(), j = 0;
+
+    vector<int> failure(len, 0);
+    failure[0] = 0; // 생략 가능
+    for (size_t i = 1; i < len; i++)
+    {
+        while(j > 0 && pattern[i] != pattern[j])
+            j = failure[j - 1];
+        if (pattern[i] == pattern[j])
+        {
+            failure[i] = j + 1;
+            j++;
+        }
+        else // 생략 가능
+            failure[i] = 0;
+    }
+    return (failure);
+}
+
+void    KMP(string& text, string&   pattern)
+{
+    size_t textLen = text.size(), pattLen = pattern.size();
+    size_t j = 0;
+    vector<int> failure = setFailure(pattern);
+
+    for (int i = 0; i < textLen; i++)
+    {
+        while (j > 0 && text[i] != pattern[j])
+            j = failure[j - 1];
+        if (text[i] == pattern[j])
+        {
+            if (j + 1 == pattLen)
+            {
+                ret++;
+                j = failure[j];
+            }
+            else
+                j++;
+        }
+    }
 }
 
 int main()
 {
-	cin>>n>>m;
-	string s, dest = "IOI", sc = "OI";
+	string text, pattern = "IOI", sc = "OI";
+	cin>>n>>m>>text;
     for (int i = 2; i <= n ; i++)
-    {
-        dest += sc;
-    }
-	cin>>s;
-    size_t  found = s.find(dest);
-    if (found == string::npos)
-    {
-        cout<<"0";
-        return (0);
-    }
-    // cout << s << "\n";
-	while (found < s.size() || found != string::npos)
-    {
-        ret++;
-        s.erase(0, found + 2);
-        // cout << s << "\n";
-        found = s.find(dest);
-    }
+        pattern += sc;
+    KMP(text, pattern);
 	cout<<ret;
 }
