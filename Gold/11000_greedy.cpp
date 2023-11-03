@@ -1,80 +1,43 @@
 #include <iostream>
-#include <cmath>
-#include <cctype>
-using namespace std;
-#include <algorithm>
-#include <cstring>
-#include <vector>
-#include <string>
-#include <iomanip>
-#include <climits>
 #include <queue>
-#include <deque>
-#include <map>
+#include <vector>
+#include <algorithm>
 
-int dx[4]={1,-1,0,0};
-int dy[4]={0,0,1,-1};
 
-struct Room
-{
-	int start, end;
-	bool operator<(const Room &other) const
-	{
-		return (this->start < other.start);
-	}
-
-	bool operator>(const Room &other) const
-	{
-		return (this->start > other.start);
-	}
-};
-int res=0, num;
-// Room room[200000];
-priority_queue<Room, vector<Room>, std::greater<Room> > pq;
+int classNum;
+std::vector<std::pair<int, int> > vClass;
+std::priority_queue<int, std::vector<int>, std::greater<int> > less_pq_Class;
 
 void output()
 {
-	Room cur = pq.top();
-	pq.pop();
-	res++;
-	while (!pq.empty())
+	less_pq_Class.push(vClass[0].second);
+	for (int i = 1; i < classNum; ++i)
 	{
-		Room tmp = pq.top();
-		pq.pop();
-		if (cur.end < tmp.start)
-		{
-			cur = tmp;
-			res--;
-		}
+		int oneTime_start = vClass[i].first;
+		int oneTime_end = vClass[i].second;
+		less_pq_Class.push(oneTime_end);
+		if (less_pq_Class.top() <= oneTime_start)
+			less_pq_Class.pop();
 		else
-		{
-			res++;
-		}
+			continue;
 	}
+	std::cout << less_pq_Class.size();
 }
 
 void input()
 {
-	cin>>num;
-	for(int i=0; i<num; i++)
+	std::cin >> classNum;
+	for (int i = 0; i < classNum; i++)
 	{
-        Room input;
-		cin>>input.start>>input.end;
-        pq.push(input);
+		int oneTime_start, oneTime_end;
+		std::cin >> oneTime_start >> oneTime_end;
+		vClass.push_back(std::make_pair(oneTime_start, oneTime_end));
 	}
-
-	// check input
-    // for(int i=0; i<num; i++)
-	// {
-    //     Room output = pq.top();
-    //     pq.pop();
-	// 	cout<< output.start << ' ' << output.end << '\n';
-	// }
-    // exit(0);
+	sort(vClass.begin(), vClass.end());
 }
 
-int main() {
+int main()
+{
 	input();
 	output();
-	cout<<res-1;
 }
