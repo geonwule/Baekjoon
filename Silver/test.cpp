@@ -1,36 +1,56 @@
 #include <iostream>
+#include <algorithm>
 #include <vector>
+#include <string.h>
+
 
 using namespace std;
-#define MAX 100001
 
-int N;
-int arr[MAX];
-bool visited[MAX];
-vector<int> v[MAX];
+char arr[51][51];
+int ans[51];
+int n,mx = 0;
 
-void dfs(int k) {
-    visited[k]=true;
-    for(int i=0;i<v[k].size();i++) {
-        int next = v[k][i];
-        if(!visited[next]) {
-            arr[next]=k;
-            dfs(next);
-        }
-    }
+void input()
+{
+    for (int i = 0; i < n; i++)
+		scanf("%s", arr[i]);
 }
 
 int main() {
-    cin >> N;
 
-    for(int i=0;i<N;i++) {
-        int x,y;
-        cin >> x >> y;
-        v[x].push_back(y);
-        v[y].push_back(x);
-    }
+	scanf("%d", &n);
+	
+    input();
+	
 
-    dfs(1);
+	for (int i = 0; i < n; i++) {
+		for (int j = 0; j < n; j++) {
+			if (i == j || arr[i][j] != 'Y') continue;
+			
+			for (int z = 0; z < n; z++) {
+				if (z == i || arr[j][z] != 'Y' ) continue;
+				arr[i][z] = '2';
+			}
 
-    for(int i=2;i<=N;i++) cout << arr[i] << "\n";
+		}
+
+	}
+
+	for (int i = 0; i < n; i++) {
+		for (int j = 0; j < n; j++)
+			if (arr[i][j] != 'N') ans[i]++;
+		mx = max(mx, ans[i]);
+	}
+	printf("%d\n", mx);
+	return 0;
 }
+
+/*
+6
+NYYNNY
+YNYNNN
+NYNYYN
+NNYNNN
+NNNNYN
+YNNNNN
+*/
