@@ -1,81 +1,121 @@
 #include <iostream>
-#include <map>
+#include <vector>
 
-#define NO_WAY 0
+using namespace std;
 
-int numPoint, numRoute, startPoint;
-int map[20001][20001];
-
-
-bool visited[20001];
-
-void dfs(int curPoint, int value, int destPoint, int &shortRoute)
+enum e_node_element
 {
-    if (curPoint == destPoint)
-    {
-        if (shortRoute == NO_WAY || shortRoute > value)
-            shortRoute = value;
-        return ;
-    }
-
-    visited[curPoint] = true;
-    for (int i = 1; i <= numPoint; i++)
-    {
-        if (visited[i] == false && map[curPoint][i] != NO_WAY)
-        {
-            dfs(i, value + map[curPoint][i], destPoint, shortRoute);
-            visited[i] = false;
-        }
-    }
-}
-struct Route
-{
-    int start, end, value;
-    bool operator<(const Route &other)
-    {
-        return (this->value < other.value);
-    }
+    INIT_VALUE = 11,
+    NOTHING = -1,
 };
-#include <queue>
-std::priority_queue<Route> pqRoute;
 
-void output()
+#include <unordered_set>
+#include <queue>
+struct Node
 {
-    for (int i = 1; i <= numPoint; i++)
-    {
-        if (startPoint == i)
-        {
-            std::cout << "0\n";
-            continue;
-        }
-        int shortRoute = NO_WAY;
-        dfs(startPoint, 0, i, shortRoute);
-        // std::cout << shortRoute << '\n';
-        visited[startPoint] = false;
-        if (shortRoute == NO_WAY) // no way
-        {
-            std::cout << "INF\n";
-            continue;
-        }
-        std::cout << shortRoute << '\n';
-    }
+    int pos, sum;
+};
+
+bool comp(Node &a, Node &b)
+{
+    return a.sum > b.sum;
 }
 
-void input()
+#include <map>
+int search(const vector<map<int, int>>& nodes, const int start, const int goal, const int V)
 {
-    std::cin >> numPoint >> numRoute >> startPoint;
-    for (int i = 0; i < numRoute; i++)
+    int result = NOTHING;
+    unordered_set<int> visited;
+    priority_queue<Node, vector<Node>, bool(*)(Node&, Node&)> q(comp);
+    // queue<Node> q;
+    q.push({start, 0});
+    while (!q.empty())
     {
-        Route tmp;
-        std::cin >> tmp.start >> tmp.end >> tmp.value;
-        pqRoute.push(tmp);
-        // if (map[start][end] == NO_WAY || map[start][end] > value) // init or more short way
-        //     map[start][end] = value;
+        Node cur = q.top();
+        // Node cur = q.front();
+        q.pop();
+
+        if (cur.pos == goal)
+        {
+            if (result == NOTHING || cur.sum < result)
+                result = cur.sum;
+            break ;
+        }
+
+        if (visited.count(cur.pos))
+            continue;
+        visited.insert(cur.pos);
+
+        const map<int, int> &cur_map = nodes[cur.pos];
+        for (auto it = cur_map.begin(); it != cur_map.end(); it++)
+        {
+            Node neighbor = {it->first, cur.sum + it->second};
+            q.push(neighbor);
+        }
+    }
+
+    return result;
+}
+
+
+void test()
+{
+    map<int, int> maps;
+    maps[1] = 10;
+    maps[2] = 20;
+    maps[3] = 30;
+    maps[4] = 40;
+    maps[5] = 50;
+
+    for(auto it = maps.begin(); it != maps.end(); it++)
+    {
+        cout << "first = " << it->first << ", second = " << it->second << endl;
     }
 }
 
 int main()
 {
-    input();
-    output();
+    // test();
+    // return 0;
+
+    // 1 <= V <= 20,000 정점의 수
+    // 1 <= E <= 300,000 간선의 수
+    int V, E;
+    int start;
+    cin >> V >> E >> start;
+
+
+    vector<map<int, int>> nodes(V + 1);
+
+    for (int i = 1; i <= E; i++)
+    {
+        int u, v, w;
+        cin >> u >> v >> w;
+        map<int, int> &cur = nodes[u];
+        map<int, int>::iterator it = cur.find(v);
+        if (it != cur.end()) //double
+        {
+            cur[v] = min(cur[v], w);
+        }
+        else
+            cur[v] = w;
+    }
+
+    vector<int> result(V + 1, NOTHING);
+
+    for (int i = 1; i <= V; i++)
+    {
+        if (i == start)
+        {
+            cout << "0\n";
+            continue;
+        }
+        result[i] = search(nodes, start, i, V);
+        if (result[i] == NOTHING)
+            cout << "INF\n";
+        else
+            cout << result[i] << '\n';
+    }
+
+    return 0;
 }
