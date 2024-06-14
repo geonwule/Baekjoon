@@ -3,119 +3,73 @@
 
 using namespace std;
 
-enum e_node_element
-{
-    INIT_VALUE = 11,
-    NOTHING = -1,
-};
-
-#include <unordered_set>
+#define MAX 20000
 #include <queue>
-struct Node
-{
-    int pos, sum;
-};
+#include <unordered_set>
 
-bool comp(Node &a, Node &b)
-{
-    return a.sum > b.sum;
-}
 
-#include <map>
-int search(const vector<map<int, int>>& nodes, const int start, const int goal, const int V)
+vector<int> solution(const int V, const int K, const vector<vector<int>>& nodes)
 {
-    int result = NOTHING;
+    vector<int> answer(V + 1, -1);
+    answer[K] = 0; //self
     unordered_set<int> visited;
-    priority_queue<Node, vector<Node>, bool(*)(Node&, Node&)> q(comp);
-    // queue<Node> q;
-    q.push({start, 0});
-    while (!q.empty())
+
+    queue<pair<int, int>> q;
+    q.push({K, 0});
+    visited.insert(K);
+
+    while(!q.empty())
     {
-        Node cur = q.top();
-        // Node cur = q.front();
+        int cur = q.front().first;
+        int sum = q.front().second;
         q.pop();
 
-        if (cur.pos == goal)
+        if (cur != K)
         {
-            if (result == NOTHING || cur.sum < result)
-                result = cur.sum;
-            break ;
+            answer[cur] = answer[cur] == -1 ? sum : min(answer[cur], sum);
         }
 
-        if (visited.count(cur.pos))
-            continue;
-        visited.insert(cur.pos);
-
-        const map<int, int> &cur_map = nodes[cur.pos];
-        for (auto it = cur_map.begin(); it != cur_map.end(); it++)
+        for (int next = 1; next <= V; next++)
         {
-            Node neighbor = {it->first, cur.sum + it->second};
-            q.push(neighbor);
+            if (nodes[cur][next] == 0 || visited.count(next))
+                continue;
+            visited.insert(next);
+            q.push({next, sum + nodes[cur][next]});
         }
     }
 
-    return result;
-}
-
-
-void test()
-{
-    map<int, int> maps;
-    maps[1] = 10;
-    maps[2] = 20;
-    maps[3] = 30;
-    maps[4] = 40;
-    maps[5] = 50;
-
-    for(auto it = maps.begin(); it != maps.end(); it++)
-    {
-        cout << "first = " << it->first << ", second = " << it->second << endl;
-    }
+    
+    return answer;
 }
 
 int main()
 {
-    // test();
-    // return 0;
-
-    // 1 <= V <= 20,000 정점의 수
-    // 1 <= E <= 300,000 간선의 수
-    int V, E;
-    int start;
-    cin >> V >> E >> start;
-
-
-    vector<map<int, int>> nodes(V + 1);
-
-    for (int i = 1; i <= E; i++)
+    int V, E, K;
+    cin >> V >> E >> K;
+    vector<vector<int>> nodes(V + 1, vector<int>(V + 1, 0));
+    while(E--)
     {
         int u, v, w;
         cin >> u >> v >> w;
-        map<int, int> &cur = nodes[u];
-        map<int, int>::iterator it = cur.find(v);
-        if (it != cur.end()) //double
-        {
-            cur[v] = min(cur[v], w);
-        }
-        else
-            cur[v] = w;
+        nodes[u][v] = nodes[u][v] == 0 ? w : min(nodes[u][v], w);
     }
 
-    vector<int> result(V + 1, NOTHING);
-
-    for (int i = 1; i <= V; i++)
+    vector<int> answer = solution(V, K, nodes);
+    for(size_t i = 1; i < answer.size(); i++)
     {
-        if (i == start)
-        {
-            cout << "0\n";
-            continue;
-        }
-        result[i] = search(nodes, start, i, V);
-        if (result[i] == NOTHING)
+        if (answer[i] == -1)
             cout << "INF\n";
         else
-            cout << result[i] << '\n';
+            cout << answer[i] << '\n';
+
     }
 
-    return 0;
+    //test
+    // for (auto y = 0; y < nodes.size(); y++)
+    // {
+    //     for (auto x = 0; x < nodes.size(); x++)
+    //     {
+    //         cout << "(" << y << " -> " << x << ")=" << nodes[y][x] << "\n";
+    //     }
+    // }
 }
