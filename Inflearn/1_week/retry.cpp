@@ -62,21 +62,9 @@ vector<string> solution(const int N, const string& str, const vector<string>& v)
         string rs(s);
         reverse(rs.begin(), rs.end());
 
-        // if (s.size() < pre.size() + suf.size())
-        //     answer.push_back("NE");
-        // else 
-
-        /* 위 코드 예외처리 안했을시 나올수 있는 반례
-        3
-        a*a
-        a
-        a
-        a
-        DA
-        DA
-        DA
-        */
-        if (s.find(pre) == 0 && rs.find(suf) == 0)
+        if (s.size() < pre.size() + suf.size())
+            answer.push_back("NE");
+        else if (s.find(pre) == 0 && rs.find(suf) == 0)
             answer.push_back("DA");
         else
             answer.push_back("NE");
