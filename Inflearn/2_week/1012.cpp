@@ -9,6 +9,7 @@ int dy[4] = {0, 0, 1, -1};
 #include <queue>
 void bfs(vector<vector<int>> &vv, int x, int y)
 {
+    vv[y][x] = 0;
     queue<pair<int, int>> q;
     q.push({x, y});
     while (q.size())
@@ -16,9 +17,6 @@ void bfs(vector<vector<int>> &vv, int x, int y)
         int curX = q.front().first;
         int curY = q.front().second;
         q.pop();
-
-        vv[curY][curX] = 0;
-        // cout << "clear " << curX << "," << curY << '\n'; //test
 
         for (int i = 0; i < 4; i++)
         {
@@ -28,19 +26,29 @@ void bfs(vector<vector<int>> &vv, int x, int y)
             if (nx < 0 || ny < 0 || nx >= vv[0].size() || ny >= vv.size() || vv[ny][nx] == 0)
                 continue;
 
+            vv[ny][nx] = 0;
             q.push({nx, ny});
         }
     }
 }
 
-void print(int N, int M, const vector<vector<int>>& vv);
+void dfs(vector<vector<int>> &vv, int x, int y)
+{
+    vv[y][x] = 0;
+
+    for (int i = 0; i < 4; i++)
+    {
+        int nx = dx[i] + x;
+        int ny = dy[i] + y;
+        if (nx < 0 || ny < 0 || nx >= vv[0].size() || ny >= vv.size() || vv[ny][nx] == 0)
+            continue;
+        dfs(vv, nx, ny);
+    }
+}
 
 int solution(vector<vector<int>> &vv, const vector<pair<int, int>> &orders)
 {
     int answer = 0;
-
-    // cout << "first\n";// test
-    // print(vv.size(), vv[0].size(), vv); //test
 
     for (const auto &p : orders)
     {
@@ -48,12 +56,9 @@ int solution(vector<vector<int>> &vv, const vector<pair<int, int>> &orders)
         int y = p.second;
         if (vv[y][x])
         {
-            // dfs();
-            bfs(vv, x, y);
+            dfs(vv, x, y);
+            // bfs(vv, x, y);
             answer++;
-            // cout << '\n'; //test
-            // cout << x << "," << y << '\n'; //test
-            // print(vv.size(), vv[0].size(), vv); //test
         }
     }
     return answer;
@@ -61,8 +66,6 @@ int solution(vector<vector<int>> &vv, const vector<pair<int, int>> &orders)
 
 int main()
 {
-    cin.tie(NULL);
-    cout.tie(NULL);
     vector<int> answer;
     size_t T;
     cin >> T;
