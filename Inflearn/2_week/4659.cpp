@@ -3,48 +3,45 @@
 
 using namespace std;
 
+bool isMoeum(const char& c)
+{
+    const static string Moeum("aeiou");
+    for (const char & m : Moeum)
+    {
+        if (m == c)
+            return true;
+    }
+    
+    return false;
+}
+
 string solution(const string &s)
 {
-    string accept = "acceptable.";
-    string naccept = "not " + accept;
-    bool ck = true;
-    string answer;
-    answer = "<" + s + "> is ";
-    string Moeum("aeiou");
+    const string accept = "<" + s + "> is acceptable.";
+    const string naccept = "<" + s + "> is not acceptable.";
 
-    int cnt = 0, mo_cnt = 0, is_mo = 0;
-    char prev = ' ';
-    for (const char& c : s)
+    bool have_moeum = false;
+    for (int i = 0; i < s.size(); i++)
     {
-        if (c == prev && c != 'e' && c != 'o')
+        bool is_moeum = false;
+        if (isMoeum(s[i]))
         {
-            ck = false;
-            break;
+            have_moeum = true;
+            is_moeum = true;
         }
 
-        int this_is_mo = 0;
-        for (const char& mc : Moeum)
-        {
-            if (c == mc)
-            {
-                mo_cnt++;
-                this_is_mo = 1;
-                break;
-            }
-        }
-
-        if (cnt == 3)
-        {
-            ck = false;
-            break;
-        }
+        if (i + 1 < s.size() && isMoeum(s[i + 1]) == is_moeum \
+        && i + 2 < s.size() && isMoeum(s[i + 2]) == is_moeum)
+            return naccept;
+        
+        if (i + 1 < s.size() && s[i] == s[i + 1] && s[i] != 'e' && s[i] != 'o')
+            return naccept;
     }
 
-    if (ck)
-        answer += accept;
-    else
-        answer += naccept;
-    return answer;
+    if (!have_moeum)
+        return naccept;
+    
+    return accept;
 }
 
 int main()

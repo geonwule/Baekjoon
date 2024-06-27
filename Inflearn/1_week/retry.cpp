@@ -1,92 +1,43 @@
-/* 11655 - 1 */
-
-// #include <iostream>
-// #include <cstring>
-
-// using namespace std;
-
-// string solution(const string& str)
-// {
-//     string answer(str);
-//     for (char &c : answer)
-//     {
-//         if (isalpha(c))
-//         {
-//             if (isupper(c))
-//             {
-//                 if (c + 13 > 'Z')
-//                     c -= 13;
-//                 else
-//                     c += 13;
-//             }
-//             else
-//             {
-//                 if (c + 13 > 'z')
-//                     c -= 13;
-//                 else
-//                     c += 13;
-//             }
-//         }
-//     }
-//     return answer;
-// }
-
-// int main()
-// {
-//     string str;
-//     getline(cin, str);
-//     cout << solution(str);
-
-//     return 0;
-// }
-
-
-/* 9996 - 1*/
 #include <iostream>
-#include <algorithm>
 #include <vector>
 
 using namespace std;
 
-vector<string> solution(const int N, const string& str, const vector<string>& v)
+int solve(vector<int>& v, const int K)
 {
-    vector<string> answer;
-
-    size_t pos = str.find('*');
-    string pre = str.substr(0, pos);
-    string suf = str.substr(pos + 1);
-    reverse(suf.begin(), suf.end());
-
-    for (const string& s : v)
+    vector<int> sum(v.size() + 1, 0);
+    for(int i = 0; i < v.size(); i++)
     {
-        string rs(s);
-        reverse(rs.begin(), rs.end());
-
-        if (s.size() < pre.size() + suf.size())
-            answer.push_back("NE");
-        else if (s.find(pre) == 0 && rs.find(suf) == 0)
-            answer.push_back("DA");
-        else
-            answer.push_back("NE");
+        sum[i + 1] = sum[i] + v[i]; 
     }
+
+    int answer = -100 * 1000000;
+
+    for (int i = K; i <= v.size(); i++)
+    {
+        int rsum = sum[i] - sum[i - K];
+        answer = max(answer, rsum);
+    }
+
+    /*
+    1 2 3 4 5
+
+    0 1 3 6 10 15
+
+    */
 
     return answer;
 }
 
 int main()
 {
-    int N;
-    string str;
-    cin >> N >> str;
+    int N, K;
+    cin >> N >> K;
+    vector<int> v(N);
+    for (int &i : v)
+        cin >> i;
 
-    vector<string> arr(N);
-    for (string &s : arr)
-        cin >> s;
-    
-    vector<string> answer = solution(N, str, arr);
-
-    for (string& s : answer)
-        cout << s << '\n';
+    cout << solve(v, K);
 
     return 0;
 }
