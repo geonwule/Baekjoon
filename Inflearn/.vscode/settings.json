@@ -5,6 +5,8 @@
         "vector": "cpp",
         "iostream": "cpp",
         "utility": "cpp",
-        "iosfwd": "cpp"
+        "iosfwd": "cpp",
+        "algorithm": "cpp",
+        "unordered_set": "cpp"
     }
 }
